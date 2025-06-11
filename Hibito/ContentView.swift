@@ -12,7 +12,32 @@ struct ContentView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header with input field
+            // Todo list
+            if viewModel.items.isEmpty {
+                // Empty state
+                Spacer()
+                Text("今日やることを追加してください")
+                    .foregroundColor(.secondary)
+                    .padding()
+                Spacer()
+            } else {
+                List {
+                    ForEach(viewModel.items) { item in
+                        TodoRowView(item: item, viewModel: viewModel)
+                    }
+                    .onMove(perform: viewModel.move)
+                    .onDelete { indexSet in
+                        for index in indexSet {
+                            viewModel.deleteItem(viewModel.items[index])
+                        }
+                    }
+                }
+                .listStyle(PlainListStyle())
+            }
+
+            Divider()
+
+            // Footer with input field
             VStack {
                 HStack {
                     TextField("今日やることを追加", text: $viewModel.newItemText)
@@ -29,32 +54,7 @@ struct ContentView: View {
                 }
                 .padding()
             }
-                            .background(.regularMaterial)
-
-            Divider()
-
-            // Todo list
-            List {
-                ForEach(viewModel.items) { item in
-                    TodoRowView(item: item, viewModel: viewModel)
-                }
-                .onMove(perform: viewModel.move)
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        viewModel.deleteItem(viewModel.items[index])
-                    }
-                }
-            }
-            .listStyle(PlainListStyle())
-
-            // Empty state
-            if viewModel.items.isEmpty {
-                Spacer()
-                Text("今日やることを追加してください")
-                    .foregroundColor(.secondary)
-                    .padding()
-                Spacer()
-            }
+            .background(.regularMaterial)
         }
         .frame(minWidth: 400, minHeight: 500)
     }
