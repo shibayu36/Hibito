@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var viewModel = TodoViewModel()
+    @FocusState private var isInputFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +21,10 @@ struct ContentView: View {
                     .foregroundColor(.secondary)
                     .padding()
                 Spacer()
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isInputFocused = false
+                    }
             } else {
                 List {
                     ForEach(viewModel.items) { item in
@@ -33,6 +38,10 @@ struct ContentView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isInputFocused = false
+                }
             }
 
             Divider()
@@ -42,11 +51,16 @@ struct ContentView: View {
                 HStack {
                     TextField("今日やることを追加", text: $viewModel.newItemText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .focused($isInputFocused)
                         .onSubmit {
                             viewModel.addItem()
+                            isInputFocused = true
                         }
 
-                    Button(action: viewModel.addItem) {
+                    Button(action: {
+                        viewModel.addItem()
+                        isInputFocused = true
+                    }) {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
                     }
