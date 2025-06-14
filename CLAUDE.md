@@ -6,6 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Hibitoは「今日のやる気を上げるためだけのTODOアプリ」です。毎日0時に全タスクが自動的に消去されるという独自のコンセプトを持つiOS/macOSアプリケーションです。
 
+## 開発時の注意
+機能開発を行ったら必ず
+
+- xcodebuildを使ったiOS Simulator向けビルドでエラーが出ていないか確認
+- ios-simulator-mcpによる動作確認
+
+を行って。
+
 ## 開発コマンド
 
 ### ビルドと実行
@@ -15,6 +23,9 @@ open Hibito.xcodeproj
 
 # Xcodeでのビルド: Cmd+B
 # Xcodeでの実行: Cmd+R
+
+# iPhone 16シミュレータ向けビルド（コマンドライン）
+xcodebuild -scheme Hibito -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' build
 ```
 
 ### テスト
@@ -28,6 +39,9 @@ swift format -i --recursive .
 # コードlint（プロジェクト全体）
 swift format lint --recursive .
 ```
+
+### 自動動作確認（iOS Simulator）
+このプロジェクトではios-simulator-mcpを導入しているため、機能に関わる変更を加えたときはMCPサーバーを経由して動作確認すること。
 
 ## アーキテクチャとコード構造
 
