@@ -10,6 +10,7 @@ Hibitoは「今日のやる気を上げるためだけのTODOアプリ」です�
 機能開発を行ったら必ず
 
 - xcodebuildを使ったiOS Simulator向けビルドでエラーが出ていないか確認
+- 関係するテストを実行
 - ios-simulator-mcpによる動作確認
 
 を行って。
