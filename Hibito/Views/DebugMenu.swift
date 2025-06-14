@@ -99,11 +99,7 @@
     }
 
     private func performReset() {
-      do {
-        try ResetManager.performReset(context: modelContext)
-      } catch {
-        print("リセットエラー: \(error)")
-      }
+      _ = AutoResetService.checkAndPerformReset(context: modelContext)
     }
   }
 #endif
