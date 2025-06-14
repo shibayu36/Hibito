@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
-    @State private var viewModel = TodoViewModel()
+    @Query(sort: \TodoItem.order) private var items: [TodoItem]
+    @Environment(\.modelContext) private var modelContext
+    @State private var newItemText = ""
     @FocusState private var isInputFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
             // Todo list
-            if viewModel.items.isEmpty {
+            if items.isEmpty {
                 // Empty state
                 Spacer()
                 Text("今日やることを追加してください")
@@ -27,21 +30,16 @@ struct ContentView: View {
                     }
             } else {
                 List {
-                    ForEach(viewModel.items) { item in
-                        TodoRowView(item: item, viewModel: viewModel)
+                    ForEach(items) { item in
+                        TodoRowView(item: item)
                     }
-                    .onMove(perform: viewModel.move)
                     .onDelete { indexSet in
                         for index in indexSet {
-                            viewModel.deleteItem(viewModel.items[index])
+                            modelContext.delete(items[index])
                         }
                     }
                 }
                 .listStyle(PlainListStyle())
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isInputFocused = false
-                }
             }
 
             Divider()
@@ -49,22 +47,22 @@ struct ContentView: View {
             // Footer with input field
             VStack {
                 HStack {
-                    TextField("今日やることを追加", text: $viewModel.newItemText)
+                    TextField("今日やることを追加", text: $newItemText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .focused($isInputFocused)
                         .onSubmit {
-                            viewModel.addItem()
+                            addItem()
                             isInputFocused = true
                         }
 
                     Button(action: {
-                        viewModel.addItem()
+                        addItem()
                         isInputFocused = true
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
                     }
-                    .disabled(viewModel.newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
                 .padding()
             }
@@ -72,18 +70,26 @@ struct ContentView: View {
         }
         .frame(minWidth: 400, minHeight: 500)
     }
+    
+    private func addItem() {
+        guard !newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        
+        let maxOrder = items.last?.order ?? 0.0
+        let item = TodoItem(content: newItemText.trimmingCharacters(in: .whitespacesAndNewlines), order: maxOrder + 1.0)
+        modelContext.insert(item)
+        newItemText = ""
+
+    }
 }
 
 struct TodoRowView: View {
     let item: TodoItem
-    let viewModel: TodoViewModel
-    @State private var isEditing = false
-    @State private var editText = ""
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         HStack {
             Button(action: {
-                viewModel.toggleCompletion(item)
+                item.isCompleted.toggle()
             }) {
                 Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                     .foregroundColor(item.isCompleted ? .green : .secondary)
@@ -91,28 +97,10 @@ struct TodoRowView: View {
             }
             .buttonStyle(PlainButtonStyle())
 
-            if isEditing {
-                TextField("", text: $editText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onSubmit {
-                        if !editText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                            item.content = editText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        }
-                        isEditing = false
-                    }
-                    .onAppear {
-                        editText = item.content
-                    }
-            } else {
-                Text(item.content)
-                    .strikethrough(item.isCompleted)
-                    .foregroundColor(item.isCompleted ? .secondary : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .onTapGesture(count: 2) {
-                        isEditing = true
-                    }
-            }
+            Text(item.content)
+                .strikethrough(item.isCompleted)
+                .foregroundColor(item.isCompleted ? .secondary : .primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             Spacer()
         }

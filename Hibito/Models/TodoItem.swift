@@ -6,9 +6,11 @@ class TodoItem {
     var id = UUID()
     var content: String = ""
     var isCompleted = false
+    var order: Double = 0.0
+    var createdAt = Date()
     
-    init(content: String = "", isCompleted: Bool = false) {
+    init(content: String = "", order: Double = 0.0) {
         self.content = content
-        self.isCompleted = isCompleted
+        self.order = order
     }
 }
