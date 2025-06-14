@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook that runs swift format on staged Swift files
+#
+# To use this hook, copy it to .git/hooks/pre-commit and make it executable:
+#   cp .githooks/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+
+# Check if swift format is available
+if ! command -v swift &> /dev/null; then
+    echo "swift format could not be found"
+    exit 1
+fi
+
+# Get all staged Swift files
+STAGED_SWIFT_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep "\.swift$")
+
+if [ -z "$STAGED_SWIFT_FILES" ]; then
+    exit 0
+fi
+
+# Format staged files
+echo "Running swift format on staged files..."
+for FILE in $STAGED_SWIFT_FILES; do
+    swift format -i "$FILE"
+    git add "$FILE"
+done
+
+# Run lint check
+echo "Running swift format lint..."
+if ! swift format lint --recursive .; then
+    echo "❌ Swift format lint failed. Please fix the issues before committing."
+    exit 1
+fi
+
+echo "✅ Swift format completed successfully"
+exit 0

@@ -20,6 +20,15 @@ open Hibito.xcodeproj
 ### テスト
 現在テストは未実装ですが、Swift Testingフレームワーク（`@Test`マクロ）を使用する予定です。
 
+### コードフォーマット
+```bash
+# コードフォーマット（プロジェクト全体）
+swift format -i --recursive .
+
+# コードlint（プロジェクト全体）
+swift format lint --recursive .
+```
+
 ## アーキテクチャとコード構造
 
 ### MVVMパターン
