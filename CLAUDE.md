@@ -30,7 +30,15 @@ xcodebuild -scheme Hibito -sdk iphonesimulator -destination 'platform=iOS Simula
 ```
 
 ### テスト
-現在テストは未実装ですが、Swift Testingフレームワーク（`@Test`マクロ）を使用する予定です。
+Swift Testingフレームワーク（`@Test`マクロ）を使用しています。
+
+```bash
+# 全テスト実行
+xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16'
+
+# 特定のテスト関数を実行
+xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/DateExtensionsTests/testIsBeforeToday
+```
 
 ### コードフォーマット
 ```bash
