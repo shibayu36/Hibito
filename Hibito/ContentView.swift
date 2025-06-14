@@ -13,9 +13,28 @@ struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @State private var newItemText = ""
   @FocusState private var isInputFocused: Bool
+  #if DEBUG
+    @State private var showDebugMenu = false
+  #endif
 
   var body: some View {
     VStack(spacing: 0) {
+      // Header with debug icon
+      #if DEBUG
+        HStack {
+          Spacer()
+          Button(action: {
+            showDebugMenu.toggle()
+          }) {
+            Image(systemName: "hammer.circle")
+              .font(.title2)
+              .foregroundColor(.gray)
+          }
+          .padding()
+        }
+        .frame(height: 44)
+      #endif
+
       // Todo list
       if items.isEmpty {
         // Empty state
@@ -67,8 +86,18 @@ struct ContentView: View {
         .padding()
       }
       .background(.regularMaterial)
+
+      // デバッグメニュー（条件付き表示）
+      #if DEBUG
+        if showDebugMenu {
+          DebugMenu()
+        }
+      #endif
     }
     .frame(minWidth: 400, minHeight: 500)
+    #if DEBUG
+      .animation(.easeInOut(duration: 0.3), value: showDebugMenu)
+    #endif
   }
 
   private func addItem() {
@@ -79,7 +108,6 @@ struct ContentView: View {
       content: newItemText.trimmingCharacters(in: .whitespacesAndNewlines), order: maxOrder + 1.0)
     modelContext.insert(item)
     newItemText = ""
-
   }
 }
 
