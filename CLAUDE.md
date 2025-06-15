@@ -10,6 +10,7 @@ Hibitoは「今日のやる気を上げるためだけのTODOアプリ」です�
 機能開発を行ったら必ず
 
 - xcodebuildを使ったiOS Simulator向けビルドでエラーが出ていないか確認
+- 関係するテストを実行
 - ios-simulator-mcpによる動作確認
 
 を行って。
@@ -29,7 +30,15 @@ xcodebuild -scheme Hibito -sdk iphonesimulator -destination 'platform=iOS Simula
 ```
 
 ### テスト
-現在テストは未実装ですが、Swift Testingフレームワーク（`@Test`マクロ）を使用する予定です。
+Swift Testingフレームワーク（`@Test`マクロ）を使用しています。
+
+```bash
+# 全テスト実行
+xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16'
+
+# 特定のテスト関数を実行
+xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/DateExtensionsTests/testIsBeforeToday
+```
 
 ### コードフォーマット
 ```bash
@@ -42,6 +51,8 @@ swift format lint --recursive .
 
 ### 自動動作確認（iOS Simulator）
 このプロジェクトではios-simulator-mcpを導入しているため、機能に関わる変更を加えたときはMCPサーバーを経由して動作確認すること。
+
+このMCPサーバーを使って操作を加えるときは、必ずui_describe_allで現在の画面の状況を把握すること。
 
 ## アーキテクチャとコード構造
 
