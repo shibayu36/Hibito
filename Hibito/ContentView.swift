@@ -75,17 +75,19 @@ struct ContentView: View {
       // Footer with input field
       VStack {
         HStack {
-          TextField("今日やることを追加", text: $newItemText)
+          TextField("今日やることを追加", text: $newItemText, axis: .vertical)
             .textFieldStyle(RoundedBorderTextFieldStyle())
+            .submitLabel(.done)
             .focused($isInputFocused)
-            .onSubmit {
+            // 改行で追加させる。onSubmitだとキーボードが一瞬閉じるのでMultilineTextField & onChangeでハックしている。
+            .onChange(of: newItemText) { _, newValue in
+              guard isInputFocused else { return }
+              guard newValue.contains("\n") else { return }
               addItem()
-              isInputFocused = true
             }
 
           Button(action: {
             addItem()
-            isInputFocused = true
           }) {
             Image(systemName: "plus.circle.fill")
               .font(.title2)
