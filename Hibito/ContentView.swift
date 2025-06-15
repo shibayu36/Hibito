@@ -40,30 +40,35 @@ struct ContentView: View {
       #endif
 
       // Todo list
-      if items.isEmpty {
-        // Empty state
-        Spacer()
-        Text("今日やることを追加してください")
-          .foregroundColor(.secondary)
-          .padding()
-        Spacer()
-          .contentShape(Rectangle())
-          .onTapGesture {
-            isInputFocused = false
-          }
-      } else {
-        List {
-          ForEach(items) { item in
-            TodoRowView(item: item)
-          }
-          .onDelete { indexSet in
-            for index in indexSet {
-              modelContext.delete(items[index])
+      VStack {
+        if items.isEmpty {
+          // Empty state
+          Spacer()
+          Text("今日やることを追加してください")
+            .foregroundColor(.secondary)
+            .padding()
+          Spacer()
+        } else {
+          List {
+            ForEach(items) { item in
+              TodoRowView(item: item)
+            }
+            .onDelete { indexSet in
+              for index in indexSet {
+                modelContext.delete(items[index])
+              }
             }
           }
+          .listStyle(PlainListStyle())
         }
-        .listStyle(PlainListStyle())
       }
+      .contentShape(Rectangle())
+      .simultaneousGesture(
+        TapGesture()
+          .onEnded { _ in
+            isInputFocused = false
+          }
+      )
 
       Divider()
 
