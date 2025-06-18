@@ -96,6 +96,7 @@ struct ContentView: View {
         }
         .padding()
       }
+      .safeAreaPadding(.bottom)
       .background(.regularMaterial)
 
       // デバッグメニュー（条件付き表示）
