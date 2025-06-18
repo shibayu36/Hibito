@@ -55,22 +55,29 @@ swift format lint --recursive .
 
 ## アーキテクチャとコード構造
 
-### MVVMパターン
+### プロジェクト構造
 ```
 Hibito/
 ├── HibitoApp.swift          # アプリエントリーポイント、SwiftDataコンテナ設定
-├── ContentView.swift        # メインUI（SwiftUI）
+├── ContentView.swift        # メインUI（SwiftUI）、データの直接操作
 ├── Models/
 │   └── TodoItem.swift      # @Modelマクロ使用のデータモデル
-└── ViewModels/
-    └── TodoViewModel.swift  # @Observableマクロ使用のビューモデル
+├── Services/
+│   └── AutoResetService.swift  # 日次リセット機能
+├── Extensions/
+│   └── Date+Extensions.swift   # 日付判定用の拡張機能
+├── Views/
+│   └── DebugMenu.swift     # デバッグメニュー（DEBUG環境のみ）
+├── ViewModels/             # 空（未使用）
+└── Managers/               # 空（未使用）
 ```
 
 ### 主要な技術スタック
 - **UI**: SwiftUI
 - **データモデル**: SwiftData（`@Model`マクロ）
-- **状態管理**: `@Observable`マクロ
+- **データアクセス**: `@Query`と`@Environment(\.modelContext)`を使用
 - **最小OS**: iOS 18.5+, macOS 14.0+
+- **コードフォーマット**: swift format（pre-commit hook設定済み）
 
 ### 現在の実装状況
 
@@ -78,14 +85,18 @@ Hibito/
 - TODOリストの基本機能（追加、編集、削除、完了切り替え）
 - ドラッグ&ドロップによる並び替え
 - ダブルタップでのインライン編集
+- **データ永続化**（SwiftDataによる永続化実装済み）
+- **日次リセット機能**（AutoResetServiceで0時に自動リセット）
+- デバッグメニュー（手動リセット、タスク生成機能）
+- ソフトウェアキーボード関連の改善
+  - 改行追加時にキーボードが閉じない
+  - TextFieldとキーボード間の適切な間隔
+  - コンテンツタップでキーボードを閉じる
 
 #### 未実装の重要機能
-1. **データ永続化**: TodoItemモデルはSwiftData対応だが、ModelContainerに未登録
-2. **日次リセット**: 0時の自動リセット機能が未実装
-3. **同期機能**: CloudKit統合によるデバイス間同期
-4. **通知**: リセット前の通知機能
+1. **同期機能**: CloudKit統合によるデバイス間同期
 
 ### 注意事項
 - `Item.swift`は未使用のため、将来削除予定
-- 現在の実装はメモリ内のみで動作し、アプリ再起動でデータが失われる
-- SwiftDataの完全な統合には`HibitoApp.swift`でTodoItemをModelContainerに追加する必要がある
+- ContentViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
+- デバッグメニューはDEBUG環境でのみ表示される
