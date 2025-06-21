@@ -65,6 +65,8 @@ struct ContentView: View {
           .listStyle(PlainListStyle())
         }
       }
+      .frame(maxWidth: .infinity)
+      .background(Color.white)
       .contentShape(Rectangle())
       .simultaneousGesture(
         TapGesture()
