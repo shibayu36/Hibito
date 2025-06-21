@@ -58,6 +58,9 @@ struct ContentView: View {
                 modelContext.delete(items[index])
               }
             }
+            .onMove { from, to in
+              moveItems(from: from, to: to)
+            }
           }
           .listStyle(PlainListStyle())
         }
@@ -138,6 +141,19 @@ struct ContentView: View {
       content: newItemText.trimmingCharacters(in: .whitespacesAndNewlines), order: maxOrder + 1.0)
     modelContext.insert(item)
     newItemText = ""
+  }
+
+  private func moveItems(from source: IndexSet, to destination: Int) {
+    guard let sourceIndex = source.first else { return }
+    let movingItem = items[sourceIndex]
+
+    let newOrder = OrderingUtility.calculateNewOrderValue(
+      sourceIndex: sourceIndex,
+      destination: destination,
+      items: items
+    )
+
+    movingItem.order = newOrder
   }
 
   // MARK: - 自動リセット機能
