@@ -65,6 +65,8 @@ struct ContentView: View {
           .listStyle(PlainListStyle())
         }
       }
+      .frame(maxWidth: .infinity)
+      .background(Color.white)
       .contentShape(Rectangle())
       .simultaneousGesture(
         TapGesture()
@@ -82,12 +84,19 @@ struct ContentView: View {
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .submitLabel(.done)
             .focused($isInputFocused)
-            // 改行で追加させる。onSubmitだとキーボードが一瞬閉じるのでMultilineTextField & onChangeでハックしている。
-            .onChange(of: newItemText) { _, newValue in
-              guard isInputFocused else { return }
-              guard newValue.contains("\n") else { return }
-              addItem()
-            }
+            #if os(iOS)
+              // iOS: 改行で追加させる。onSubmitだとキーボードが一瞬閉じるのでMultilineTextField & onChangeでハックしている。
+              .onChange(of: newItemText) { _, newValue in
+                guard isInputFocused else { return }
+                guard newValue.contains("\n") else { return }
+                addItem()
+              }
+            #else
+              // macOS: Enterキーで追加させる
+              .onSubmit {
+                addItem()
+              }
+            #endif
 
           Button(action: {
             addItem()
