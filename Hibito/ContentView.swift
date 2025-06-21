@@ -144,26 +144,16 @@ struct ContentView: View {
   }
 
   private func moveItems(from source: IndexSet, to destination: Int) {
-    // 移動するアイテムを特定
     guard let sourceIndex = source.first else { return }
     let movingItem = items[sourceIndex]
 
-    // 実際の挿入位置を計算（SwiftUIのonMoveの仕様に対応）
-    let actualDestination = sourceIndex < destination ? destination - 1 : destination
+    let newOrder = OrderingUtility.calculateNewOrderValue(
+      sourceIndex: sourceIndex,
+      destination: destination,
+      items: items
+    )
 
-    // order値を更新
-    if actualDestination == 0 {
-      // 最初に移動
-      movingItem.order = (items.first?.order ?? 0.0) - 1.0
-    } else if actualDestination >= items.count - 1 {
-      // 最後に移動
-      movingItem.order = (items.last?.order ?? 0.0) + 1.0
-    } else {
-      // 中間に移動
-      let prevOrder = items[actualDestination - 1].order
-      let nextOrder = items[actualDestination].order
-      movingItem.order = (prevOrder + nextOrder) / 2.0
-    }
+    movingItem.order = newOrder
   }
 
   // MARK: - 自動リセット機能
