@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  TodoListView.swift
 //  Hibito
 //
 //  Created by Yuki Shibazaki on 2025/06/11.
@@ -9,14 +9,22 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
-  @Query(sort: \TodoItem.order) private var items: [TodoItem]
+struct TodoListView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
+
+  // Todoリスト
+  @Query(sort: \TodoItem.order) private var items: [TodoItem]
+
+  // 新規Todo入力の状態管理
   @State private var newItemText = ""
   @FocusState private var isInputFocused: Bool
+
+  // 自動リセット機能の状態管理
   @State private var resetTimer: Timer?
   @State private var isPerformingReset = false
+
+  // デバッグメニューの状態管理
   #if DEBUG
     @State private var showDebugMenu = false
   #endif
@@ -114,7 +122,7 @@ struct ContentView: View {
       // デバッグメニュー（条件付き表示）
       #if DEBUG
         if showDebugMenu {
-          DebugMenu()
+          DebugMenuView()
         }
       #endif
     }
@@ -223,5 +231,5 @@ struct TodoRowView: View {
 }
 
 #Preview {
-  ContentView()
+  TodoListView()
 }

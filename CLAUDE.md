@@ -14,6 +14,28 @@ Hibitoは「今日のやる気を上げるためだけのTODOアプリ」です�
 
 を行って。
 
+## リファクタリング時の注意事項
+
+### 関数の置き換え時の手順
+関数を新しい実装に置き換える場合は、以下の手順を必ず実行すること：
+
+1. **利用箇所の調査**: 置き換え対象の関数のすべての利用箇所を`grep`や`Task`ツールで調査
+2. **完全な置き換え**: すべての利用箇所を新しい関数に書き換え
+3. **古い関数の削除**: 利用箇所がなくなったことを確認後、古い関数を削除
+4. **後方互換性の排除**: 不要な関数を「念のため」残さない
+
+### 例
+```swift
+// ❌ 悪い例：古い関数を残してしまう
+func oldFunction() { ... }  // Deprecated - 残さない！
+func newFunction() { ... }
+
+// ✅ 良い例：完全に置き換える
+// 1. すべての oldFunction() の呼び出しを newFunction() に変更
+// 2. oldFunction を削除
+func newFunction() { ... }
+```
+
 ## 開発コマンド
 
 ### ビルドと実行
@@ -36,7 +58,7 @@ Swift Testingフレームワーク（`@Test`マクロ）を使用しています
 xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # 特定のテスト関数を実行
-xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/DateExtensionsTests/testIsBeforeToday
+xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/Extensions/Date+ExtensionsTests/testIsBeforeToday
 ```
 
 ### コードフォーマット
@@ -59,17 +81,31 @@ swift format lint --recursive .
 ```
 Hibito/
 ├── HibitoApp.swift          # アプリエントリーポイント、SwiftDataコンテナ設定
-├── ContentView.swift        # メインUI（SwiftUI）、データの直接操作
+├── Extensions/
+│   └── Date+Extensions.swift   # 日付判定用の拡張機能
 ├── Models/
 │   └── TodoItem.swift      # @Modelマクロ使用のデータモデル
 ├── Services/
 │   └── AutoResetService.swift  # 日次リセット機能
-├── Extensions/
-│   └── Date+Extensions.swift   # 日付判定用の拡張機能
+├── Utilities/
+│   └── OrderingUtility.swift   # タスクの並び替え用ユーティリティ
 ├── Views/
-│   └── DebugMenu.swift     # デバッグメニュー（DEBUG環境のみ）
+│   ├── TodoListView.swift  # メインUI（SwiftUI）、データの直接操作
+│   └── DebugMenuView.swift # デバッグメニュー（DEBUG環境のみ）
 ├── ViewModels/             # 空（未使用）
 └── Managers/               # 空（未使用）
+```
+
+### テスト構造
+```
+HibitoTests/
+├── Extensions/
+│   └── Date+ExtensionsTests.swift  # Date+Extensions.swiftのテスト
+├── Services/
+│   └── AutoResetServiceTests.swift # AutoResetService.swiftのテスト
+├── Utilities/
+│   └── OrderingUtilityTests.swift  # OrderingUtility.swiftのテスト
+└── HibitoTests.swift       # 基本テスト
 ```
 
 ### 主要な技術スタック
@@ -98,5 +134,6 @@ Hibito/
 
 ### 注意事項
 - `Item.swift`は未使用のため、将来削除予定
-- ContentViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
+- TodoListViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
 - デバッグメニューはDEBUG環境でのみ表示される
+- テストファイルは本体のディレクトリ構造に合わせて整理されている
