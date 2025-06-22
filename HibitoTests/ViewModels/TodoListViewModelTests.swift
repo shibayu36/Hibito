@@ -13,14 +13,19 @@ import Testing
 
 struct TodoListViewModelTests {
 
+  /// テスト用のin-memoryModelContextを作成します
+  /// - Returns: 作成されたModelContext
+  @MainActor
+  private func createTestContext() throws -> ModelContext {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try ModelContainer(for: TodoItem.self, configurations: config)
+    return container.mainContext
+  }
+
   @MainActor
   @Test
   func Todo追加から完了切り替えと削除までの基本操作() async throws {
-    // In-memory ModelContainerの作成
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(for: TodoItem.self, configurations: config)
-    let context = container.mainContext
-
+    let context = try createTestContext()
     let viewModel = TodoListViewModel(modelContext: context)
 
     // 初期状態: Todoリストが空
@@ -58,10 +63,7 @@ struct TodoListViewModelTests {
   @MainActor
   @Test
   func 空文字やスペースのみのTodoは追加されない() async throws {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(for: TodoItem.self, configurations: config)
-    let context = container.mainContext
-
+    let context = try createTestContext()
     let viewModel = TodoListViewModel(modelContext: context)
 
     // 空文字を追加
@@ -85,10 +87,7 @@ struct TodoListViewModelTests {
   @MainActor
   @Test
   func Todoの並び替えが正しく動作する() async throws {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(for: TodoItem.self, configurations: config)
-    let context = container.mainContext
-
+    let context = try createTestContext()
     let viewModel = TodoListViewModel(modelContext: context)
 
     // 4つのTodoを追加
@@ -129,10 +128,7 @@ struct TodoListViewModelTests {
   @MainActor
   @Test
   func 昨日作成されたTodoはすべて削除される() async throws {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(for: TodoItem.self, configurations: config)
-    let context = container.mainContext
-
+    let context = try createTestContext()
     let viewModel = TodoListViewModel(modelContext: context)
 
     // 昨日のTodoを3つ作成
@@ -162,10 +158,7 @@ struct TodoListViewModelTests {
   @MainActor
   @Test
   func 今日作成されたTodoはすべて残る() async throws {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(for: TodoItem.self, configurations: config)
-    let context = container.mainContext
-
+    let context = try createTestContext()
     let viewModel = TodoListViewModel(modelContext: context)
 
     // 今日のTodoを3つ作成
