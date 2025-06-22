@@ -25,7 +25,7 @@ struct HibitoApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      TodoListView()
     }
     .modelContainer(sharedModelContainer)
   }

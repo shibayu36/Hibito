@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  TodoListView.swift
 //  Hibito
 //
 //  Created by Yuki Shibazaki on 2025/06/11.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
+struct TodoListView: View {
   @Query(sort: \TodoItem.order) private var items: [TodoItem]
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
@@ -223,5 +223,5 @@ struct TodoRowView: View {
 }
 
 #Preview {
-  ContentView()
+  TodoListView()
 }
