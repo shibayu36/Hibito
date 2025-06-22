@@ -10,13 +10,21 @@ import SwiftData
 import SwiftUI
 
 struct TodoListView: View {
-  @Query(sort: \TodoItem.order) private var items: [TodoItem]
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
+
+  // Todoリスト
+  @Query(sort: \TodoItem.order) private var items: [TodoItem]
+
+  // 新規Todo入力の状態管理
   @State private var newItemText = ""
   @FocusState private var isInputFocused: Bool
+
+  // 自動リセット機能の状態管理
   @State private var resetTimer: Timer?
   @State private var isPerformingReset = false
+
+  // デバッグメニューの状態管理
   #if DEBUG
     @State private var showDebugMenu = false
   #endif
