@@ -122,7 +122,7 @@ struct TodoListView: View {
       // デバッグメニュー（条件付き表示）
       #if DEBUG
         if showDebugMenu {
-          DebugMenuView()
+          DebugMenuView(viewModel: viewModel)
         }
       #endif
     }
