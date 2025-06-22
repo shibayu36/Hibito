@@ -17,8 +17,9 @@ struct TodoListViewModelTests {
   /// - Returns: 作成されたModelContext
   @MainActor
   private func createTestContext() throws -> ModelContext {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(for: TodoItem.self, configurations: config)
+    let schema = Schema([TodoItem.self])
+    let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+    let container = try ModelContainer(for: schema, configurations: [config])
     return container.mainContext
   }
 
