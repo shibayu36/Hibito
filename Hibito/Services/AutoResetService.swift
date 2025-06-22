@@ -9,14 +9,16 @@ struct AutoResetService {
   /// - Returns: リセットを実行した場合はtrue
   @MainActor
   static func checkAndPerformReset(context: ModelContext) -> Bool {
+    let resetHour = SettingsRepository.shared.resetHour
+
     let descriptor = FetchDescriptor<TodoItem>()
     guard let allItems = try? context.fetch(descriptor) else {
       return false
     }
 
-    // 昨日以前に作成されたタスクを特定
+    // 設定時刻より前に作成されたタスクを特定
     let tasksToDelete = allItems.filter { item in
-      item.createdAt.isBeforeToday()
+      item.createdAt.isBeforeResetTime(hour: resetHour)
     }
 
     // 古いタスクがない場合は何もしない
