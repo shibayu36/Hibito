@@ -36,7 +36,7 @@ Swift Testingフレームワーク（`@Test`マクロ）を使用しています
 xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # 特定のテスト関数を実行
-xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/DateExtensionsTests/testIsBeforeToday
+xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/Extensions/Date+ExtensionsTests/testIsBeforeToday
 ```
 
 ### コードフォーマット
@@ -59,17 +59,31 @@ swift format lint --recursive .
 ```
 Hibito/
 ├── HibitoApp.swift          # アプリエントリーポイント、SwiftDataコンテナ設定
-├── ContentView.swift        # メインUI（SwiftUI）、データの直接操作
+├── Extensions/
+│   └── Date+Extensions.swift   # 日付判定用の拡張機能
 ├── Models/
 │   └── TodoItem.swift      # @Modelマクロ使用のデータモデル
 ├── Services/
 │   └── AutoResetService.swift  # 日次リセット機能
-├── Extensions/
-│   └── Date+Extensions.swift   # 日付判定用の拡張機能
+├── Utilities/
+│   └── OrderingUtility.swift   # タスクの並び替え用ユーティリティ
 ├── Views/
-│   └── DebugMenu.swift     # デバッグメニュー（DEBUG環境のみ）
+│   ├── TodoListView.swift  # メインUI（SwiftUI）、データの直接操作
+│   └── DebugMenuView.swift # デバッグメニュー（DEBUG環境のみ）
 ├── ViewModels/             # 空（未使用）
 └── Managers/               # 空（未使用）
+```
+
+### テスト構造
+```
+HibitoTests/
+├── Extensions/
+│   └── Date+ExtensionsTests.swift  # Date+Extensions.swiftのテスト
+├── Services/
+│   └── AutoResetServiceTests.swift # AutoResetService.swiftのテスト
+├── Utilities/
+│   └── OrderingUtilityTests.swift  # OrderingUtility.swiftのテスト
+└── HibitoTests.swift       # 基本テスト
 ```
 
 ### 主要な技術スタック
@@ -98,5 +112,6 @@ Hibito/
 
 ### 注意事項
 - `Item.swift`は未使用のため、将来削除予定
-- ContentViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
+- TodoListViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
 - デバッグメニューはDEBUG環境でのみ表示される
+- テストファイルは本体のディレクトリ構造に合わせて整理されている
