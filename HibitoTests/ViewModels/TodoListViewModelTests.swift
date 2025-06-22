@@ -15,7 +15,7 @@ struct TodoListViewModelTests {
 
   @MainActor
   @Test
-  func 統合的なシナリオテスト() async throws {
+  func Todo追加から完了切り替えと削除までの基本操作() async throws {
     // In-memory ModelContainerの作成
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: TodoItem.self, configurations: config)
