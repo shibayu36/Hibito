@@ -1,5 +1,5 @@
 //
-//  DebugMenu.swift
+//  DebugMenuView.swift
 //  Hibito
 //
 //  Created by Yuki Shibazaki on 2025/06/14.
@@ -9,7 +9,7 @@
   import SwiftUI
   import SwiftData
 
-  struct DebugMenu: View {
+  struct DebugMenuView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TodoItem.order) private var items: [TodoItem]
 

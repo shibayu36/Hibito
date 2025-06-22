@@ -114,7 +114,7 @@ struct TodoListView: View {
       // デバッグメニュー（条件付き表示）
       #if DEBUG
         if showDebugMenu {
-          DebugMenu()
+          DebugMenuView()
         }
       #endif
     }
