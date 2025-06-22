@@ -64,6 +64,26 @@ class TodoListViewModel {
     loadTodos()
   }
 
+  private func calculateNewOrderValue(
+    sourceIndex: Int,
+    destination: Int,
+    items: [TodoItem]
+  ) -> Double {
+    guard !items.isEmpty else { return 1.0 }
+
+    let actualDestination = sourceIndex < destination ? destination - 1 : destination
+
+    if actualDestination == 0 {
+      return (items.first?.order ?? 0.0) - 1.0
+    } else if actualDestination >= items.count - 1 {
+      return (items.last?.order ?? 0.0) + 1.0
+    } else {
+      let prevOrder = items[actualDestination - 1].order
+      let nextOrder = items[actualDestination].order
+      return (prevOrder + nextOrder) / 2.0
+    }
+  }
+
   // MARK: - Reset Functionality
 
   func performReset() {
@@ -87,27 +107,5 @@ class TodoListViewModel {
     try? modelContext.save()
 
     loadTodos()
-  }
-
-  // MARK: - Private Methods
-
-  private func calculateNewOrderValue(
-    sourceIndex: Int,
-    destination: Int,
-    items: [TodoItem]
-  ) -> Double {
-    guard !items.isEmpty else { return 1.0 }
-
-    let actualDestination = sourceIndex < destination ? destination - 1 : destination
-
-    if actualDestination == 0 {
-      return (items.first?.order ?? 0.0) - 1.0
-    } else if actualDestination >= items.count - 1 {
-      return (items.last?.order ?? 0.0) + 1.0
-    } else {
-      let prevOrder = items[actualDestination - 1].order
-      let nextOrder = items[actualDestination].order
-      return (prevOrder + nextOrder) / 2.0
-    }
   }
 }
