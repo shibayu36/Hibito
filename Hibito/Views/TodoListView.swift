@@ -10,11 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct TodoListView: View {
-  @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
 
-  // Todoリスト
-  @Query(sort: \TodoItem.order) private var items: [TodoItem]
+  @State private var viewModel = TodoListViewModel(
+    modelContext: ModelContainerManager.shared.mainContext
+  )
 
   // 新規Todo入力の状態管理
   @State private var newItemText = ""
@@ -49,7 +49,7 @@ struct TodoListView: View {
 
       // Todo list
       VStack {
-        if items.isEmpty {
+        if viewModel.todos.isEmpty {
           // Empty state
           Spacer()
           Text("今日やることを追加してください")
@@ -58,16 +58,16 @@ struct TodoListView: View {
           Spacer()
         } else {
           List {
-            ForEach(items) { item in
-              TodoRowView(item: item)
+            ForEach(viewModel.todos) { item in
+              TodoRowView(item: item, viewModel: viewModel)
             }
             .onDelete { indexSet in
-              for index in indexSet {
-                modelContext.delete(items[index])
-              }
+              guard let index = indexSet.first else { return }
+              viewModel.deleteTodo(at: index)
             }
             .onMove { from, to in
-              moveItems(from: from, to: to)
+              guard let sourceIndex = from.first else { return }
+              viewModel.moveTodo(from: sourceIndex, to: to)
             }
           }
           .listStyle(PlainListStyle())
@@ -122,7 +122,7 @@ struct TodoListView: View {
       // デバッグメニュー（条件付き表示）
       #if DEBUG
         if showDebugMenu {
-          DebugMenuView()
+          DebugMenuView(viewModel: viewModel)
         }
       #endif
     }
@@ -151,26 +151,8 @@ struct TodoListView: View {
   }
 
   private func addItem() {
-    guard !newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-
-    let maxOrder = items.last?.order ?? 0.0
-    let item = TodoItem(
-      content: newItemText.trimmingCharacters(in: .whitespacesAndNewlines), order: maxOrder + 1.0)
-    modelContext.insert(item)
+    viewModel.addTodo(content: newItemText)
     newItemText = ""
-  }
-
-  private func moveItems(from source: IndexSet, to destination: Int) {
-    guard let sourceIndex = source.first else { return }
-    let movingItem = items[sourceIndex]
-
-    let newOrder = OrderingUtility.calculateNewOrderValue(
-      sourceIndex: sourceIndex,
-      destination: destination,
-      items: items
-    )
-
-    movingItem.order = newOrder
   }
 
   // MARK: - 自動リセット機能
@@ -181,7 +163,7 @@ struct TodoListView: View {
 
     isPerformingReset = true
     withAnimation(.easeOut(duration: 0.5)) {
-      _ = AutoResetService.checkAndPerformReset(context: modelContext)
+      viewModel.performReset()
     }
     isPerformingReset = false
   }
@@ -206,12 +188,12 @@ struct TodoListView: View {
 
 struct TodoRowView: View {
   let item: TodoItem
-  @Environment(\.modelContext) private var modelContext
+  let viewModel: TodoListViewModel
 
   var body: some View {
     HStack {
       Button(action: {
-        item.isCompleted.toggle()
+        viewModel.toggleCompletion(for: item)
       }) {
         Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
           .foregroundColor(item.isCompleted ? .green : .secondary)

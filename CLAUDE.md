@@ -61,6 +61,8 @@ xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 
 xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/Extensions/Date+ExtensionsTests/testIsBeforeToday
 ```
 
+swift testは使えないから、xcodebuild testを使うこと。
+
 ### コードフォーマット
 ```bash
 # コードフォーマット（プロジェクト全体）
