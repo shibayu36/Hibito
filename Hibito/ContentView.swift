@@ -17,16 +17,30 @@ struct ContentView: View {
   @FocusState private var isInputFocused: Bool
   @State private var resetTimer: Timer?
   @State private var isPerformingReset = false
+  @StateObject private var settingsViewModel = SettingsViewModel()
+  @State private var showSettings = false
   #if DEBUG
     @State private var showDebugMenu = false
   #endif
 
   var body: some View {
     VStack(spacing: 0) {
-      // Header with debug icon
-      #if DEBUG
-        HStack {
-          Spacer()
+      // Header with settings and debug icons
+      HStack {
+        Spacer()
+
+        // Settings icon
+        Button(action: {
+          showSettings.toggle()
+        }) {
+          Image(systemName: "gearshape.circle")
+            .font(.title2)
+            .foregroundColor(.gray)
+        }
+        .padding(.trailing, 8)
+
+        // Debug icon
+        #if DEBUG
           Button(action: {
             showDebugMenu.toggle()
           }) {
@@ -34,10 +48,10 @@ struct ContentView: View {
               .font(.title2)
               .foregroundColor(.gray)
           }
-          .padding()
-        }
-        .frame(height: 44)
-      #endif
+        #endif
+      }
+      .padding()
+      .frame(height: 44)
 
       // Todo list
       VStack {
@@ -140,6 +154,17 @@ struct ContentView: View {
     #if DEBUG
       .animation(.easeInOut(duration: 0.3), value: showDebugMenu)
     #endif
+    .sheet(isPresented: $showSettings) {
+      SettingsView(settingsViewModel: settingsViewModel)
+        .presentationDetents([.medium])
+        #if os(macOS)
+          .frame(width: 400, height: 300)
+        #endif
+    }
+    .onChange(of: settingsViewModel.resetHour) { _, _ in
+      // 設定変更時に即座にリセットチェック実行
+      performResetCheck()
+    }
   }
 
   private func addItem() {
