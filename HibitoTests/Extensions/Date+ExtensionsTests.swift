@@ -1,5 +1,5 @@
 //
-//  DateExtensionsTests.swift
+//  Date+ExtensionsTests.swift
 //  HibitoTests
 //
 //  Created by Yuki Shibazaki on 2025/06/14.
