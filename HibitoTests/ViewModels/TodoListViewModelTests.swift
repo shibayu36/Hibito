@@ -181,7 +181,7 @@ struct TodoListViewModelTests {
 
   @MainActor
   @Test
-  func calculateNewOrderValue_先頭に移動() async throws {
+  func calculateOrderValue_先頭に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
     let viewModel = TodoListViewModel(modelContext: context)
@@ -193,13 +193,13 @@ struct TodoListViewModelTests {
     ]
 
     // 先頭（インデックス0）に移動
-    let result = viewModel.calculateNewOrderValue(destination: 0, items: items)
+    let result = viewModel.calculateOrderValue(destination: 0, items: items)
     #expect(result == 0.0)  // 1.0 - 1.0
   }
 
   @MainActor
   @Test
-  func calculateNewOrderValue_末尾に移動() async throws {
+  func calculateOrderValue_末尾に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
     let viewModel = TodoListViewModel(modelContext: context)
@@ -211,13 +211,13 @@ struct TodoListViewModelTests {
     ]
 
     // 末尾（インデックス3以上）に移動
-    let result = viewModel.calculateNewOrderValue(destination: 3, items: items)
+    let result = viewModel.calculateOrderValue(destination: 3, items: items)
     #expect(result == 4.0)  // 3.0 + 1.0
   }
 
   @MainActor
   @Test
-  func calculateNewOrderValue_中間位置に移動() async throws {
+  func calculateOrderValue_中間位置に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
     let viewModel = TodoListViewModel(modelContext: context)
@@ -230,7 +230,7 @@ struct TodoListViewModelTests {
     ]
 
     // インデックス1に移動
-    let result = viewModel.calculateNewOrderValue(destination: 1, items: items)
+    let result = viewModel.calculateOrderValue(destination: 1, items: items)
     #expect(result == 1.5)  // (1.0 + 2.0) / 2.0
   }
 
