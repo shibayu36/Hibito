@@ -24,6 +24,9 @@ class TodoListViewModel {
   func loadTodos() {
     let descriptor = FetchDescriptor<TodoItem>(sortBy: [SortDescriptor(\.order)])
     todos = (try? modelContext.fetch(descriptor)) ?? []
+    for (_, todo) in todos.enumerated() {
+      print("content: \(todo.content), order: \(todo.order)")
+    }
   }
 
   /// 新しいTodoアイテムを追加します
@@ -57,6 +60,7 @@ class TodoListViewModel {
   }
 
   /// Todoアイテムを別の位置に移動します
+  /// sourceIndexやdestinationはSwiftUIのonMoveから提供される値を前提とする
   /// - Parameters:
   ///   - sourceIndex: 移動元のインデックス
   ///   - destination: 移動先のインデックス
@@ -65,11 +69,8 @@ class TodoListViewModel {
     guard sourceIndex >= 0 && sourceIndex < todos.count else { return }
     let movingItem = todos[sourceIndex]
 
-    // SwiftUIのonMoveから提供される値を実際の挿入位置に変換
-    let actualDestination = sourceIndex < destination ? destination - 1 : destination
-
-    let newOrder = calculateNewOrderValue(
-      destination: actualDestination,
+    let newOrder = calculateOrderValue(
+      destination: destination,
       items: todos
     )
 
@@ -77,24 +78,27 @@ class TodoListViewModel {
     loadTodos()
   }
 
-  /// 並び替え時の新しいorder値を計算します
+  /// 指定したインデックスに挿入する場合のorder値を計算する
   /// - Parameters:
   ///   - destination: 実際の挿入位置のインデックス
   ///   - items: 現在のアイテム配列
-  /// - Returns: 新しいorder値
+  /// - Returns: order値
   /// - Note: 先頭に移動する場合は最小order値-1.0、末尾の場合は最大order値+1.0、
   ///         中間位置の場合は前後のorder値の平均値を返します
-  internal func calculateNewOrderValue(
+  internal func calculateOrderValue(
     destination: Int,
     items: [TodoItem]
   ) -> Double {
     guard !items.isEmpty else { return 1.0 }
 
     if destination == 0 {
+      // 先頭に追加
       return (items.first?.order ?? 0.0) - 1.0
-    } else if destination >= items.count - 1 {
+    } else if destination >= items.count {
+      // 末尾に追加
       return (items.last?.order ?? 0.0) + 1.0
     } else {
+      // 中間に追加
       let prevOrder = items[destination - 1].order
       let nextOrder = items[destination].order
       return (prevOrder + nextOrder) / 2.0
