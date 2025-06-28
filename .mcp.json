@@ -1,13 +1,11 @@
 {
   "mcpServers": {
-    "ios-simulator": {
-      "type": "stdio",
+    "XcodeBuildMCP": {
       "command": "npx",
       "args": [
         "-y",
-        "ios-simulator-mcp"
-      ],
-      "env": {}
+        "xcodebuildmcp@latest"
+      ]
     }
   }
 }
