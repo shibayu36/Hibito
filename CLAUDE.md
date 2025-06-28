@@ -73,9 +73,7 @@ swift format lint --recursive .
 ```
 
 ### 自動動作確認（iOS Simulator）
-このプロジェクトではios-simulator-mcpを導入しているため、機能に関わる変更を加えたときはMCPサーバーを経由して動作確認すること。
-
-このMCPサーバーを使って操作を加えるときは、必ずui_describe_allで現在の画面の状況を把握すること。
+このプロジェクトではXcodeBuildMCPを導入しているため、機能に関わる変更を加えたときはMCPサーバーを経由して動作確認すること。
 
 ## アーキテクチャとコード構造
 
