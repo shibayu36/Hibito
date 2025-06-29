@@ -6,6 +6,20 @@
         "-y",
         "xcodebuildmcp@latest"
       ]
+    },
+    "xcodeproj": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-v",
+        "/Users/shibayu36/development/src/github.com/shibayu36/Hibito:/workspace",
+        "ghcr.io/giginet/xcodeproj-mcp-server",
+        "/workspace"
+      ],
+      "env": {}
     }
   }
 }
