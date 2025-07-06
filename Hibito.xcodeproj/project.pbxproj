@@ -24,6 +24,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9456AD442E1AB32F006B1DBB /* Hibito.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Hibito.xctestplan; sourceTree = "<group>"; };
 		94BD4B412DF8FBDD00FAACA9 /* Hibito.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hibito.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94BD4B522DF8FBDE00FAACA9 /* HibitoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HibitoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94BD4B5C2DF8FBDE00FAACA9 /* HibitoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HibitoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +89,7 @@
 		94BD4B382DF8FBDD00FAACA9 = {
 			isa = PBXGroup;
 			children = (
+				9456AD442E1AB32F006B1DBB /* Hibito.xctestplan */,
 				94BD4B432DF8FBDD00FAACA9 /* Hibito */,
 				94BD4B552DF8FBDE00FAACA9 /* HibitoTests */,
 				94BD4B5F2DF8FBDE00FAACA9 /* HibitoUITests */,

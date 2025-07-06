@@ -1,0 +1,36 @@
+{
+  "configurations" : [
+    {
+      "id" : "7A81BCA4-82FF-49A5-AB81-D8375C519003",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Hibito.xcodeproj",
+      "identifier" : "94BD4B402DF8FBDD00FAACA9",
+      "name" : "Hibito"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Hibito.xcodeproj",
+        "identifier" : "94BD4B5B2DF8FBDE00FAACA9",
+        "name" : "HibitoUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Hibito.xcodeproj",
+        "identifier" : "94BD4B512DF8FBDE00FAACA9",
+        "name" : "HibitoTests"
+      }
+    }
+  ],
+  "version" : 1
+}
