@@ -52,7 +52,7 @@ struct TodoListView: View {
         if viewModel.todos.isEmpty {
           // Empty state
           Spacer()
-          Text("今日やることを追加してください")
+          Text("今日やることを追加しよう")
             .foregroundColor(.secondary)
             .padding()
           Spacer()
