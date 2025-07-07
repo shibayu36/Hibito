@@ -24,9 +24,6 @@ class TodoListViewModel {
   func loadTodos() {
     let descriptor = FetchDescriptor<TodoItem>(sortBy: [SortDescriptor(\.order)])
     todos = (try? modelContext.fetch(descriptor)) ?? []
-    for (_, todo) in todos.enumerated() {
-      print("content: \(todo.content), order: \(todo.order)")
-    }
   }
 
   /// 新しいTodoアイテムを追加します
