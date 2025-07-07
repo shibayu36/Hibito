@@ -74,7 +74,8 @@ struct TodoListView: View {
         }
       }
       .frame(maxWidth: .infinity)
-      .background(Color.white)
+      // TODO: macで白に統一したいが、ダークモードに対応できてない
+      // .background(Color.white)
       .contentShape(Rectangle())
       .simultaneousGesture(
         TapGesture()
