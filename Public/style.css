@@ -94,28 +94,6 @@ p {
     padding: 8px 0;
 }
 
-/* Links Section */
-.link-buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.button {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #0071e3;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-
-.button:hover {
-    background-color: #0058ca;
-}
-
 /* Footer */
 footer {
     text-align: center;
@@ -137,14 +115,6 @@ footer {
     
     section {
         padding: 20px;
-    }
-    
-    .link-buttons {
-        flex-direction: column;
-    }
-    
-    .button {
-        text-align: center;
     }
 }
 
