@@ -117,29 +117,3 @@ footer {
         padding: 20px;
     }
 }
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #000;
-        color: #f5f5f7;
-    }
-    
-    section {
-        background-color: #1d1d1f;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    h1, h2 {
-        color: #f5f5f7;
-    }
-    
-    p, .features li {
-        color: #ccc;
-    }
-    
-    footer {
-        color: #999;
-        border-top-color: #333;
-    }
-}
