@@ -84,6 +84,16 @@ p {
     font-weight: bold;
 }
 
+/* Links List */
+.links ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.links li {
+    padding: 8px 0;
+}
+
 /* Links Section */
 .link-buttons {
     display: flex;
