@@ -4,87 +4,88 @@
 <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width'>
-    <title>プライバシーポリシー</title>
+    <title>プライバシーポリシー - Daily Do</title>
+    <link rel="stylesheet" href="style.css">
     <style>
+        /* Page specific styles for privacy policy */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f5f5f7;
+        }
+        
+        .privacy-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        strong {
-            font-size: 1.5em;
-            color: #1a1a1a;
+        .privacy-container > strong:first-child {
+            font-size: 2.5rem;
+            color: #1d1d1f;
+            margin-bottom: 30px;
+            display: block;
+            border-bottom: none;
+            text-align: center;
+        }
+
+        .privacy-container strong {
+            font-size: 1.3rem;
+            color: #1d1d1f;
             display: block;
             margin-top: 30px;
             margin-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
+            border-bottom: none;
         }
 
-        body>strong:first-child {
-            font-size: 2em;
-            margin-top: 10px;
-            border-bottom: 3px solid #333;
+        .privacy-container p {
+            color: #555;
+            text-align: left;
         }
 
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
+        .privacy-container ul {
+            padding-left: 30px;
         }
 
-        ul {
-            padding-left: 40px;
-            margin: 15px 0;
+        .privacy-container li {
+            color: #555;
         }
 
-        li {
-            margin-bottom: 10px;
-        }
-
-        hr {
-            margin: 40px 0;
-            border: none;
-            border-top: 1px solid #ddd;
-        }
-
-        a {
-            color: #2196F3;
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0071e3;
             text-decoration: none;
+            font-weight: 500;
         }
 
-        a:hover {
+        .home-link:hover {
             text-decoration: underline;
         }
 
-        br+strong {
-            margin-top: 25px;
-        }
-
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
+            .privacy-container {
+                padding: 20px;
             }
 
-            body>strong:first-child {
-                font-size: 1.5em;
+            .privacy-container > strong:first-child {
+                font-size: 2rem;
             }
 
-            strong {
-                font-size: 1.2em;
+            .privacy-container strong {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <strong>プライバシーポリシー</strong>
-    <p>このプライバシーポリシーは、Yuki Shibazaki（以下「サービス提供者」）がFreemiumサービスとして作成したモバイルデバイス向けDaily
-        Doアプリ（以下「アプリケーション」）に適用されます。本サービスは「現状有姿」で提供されます。</p><br><strong>情報の収集と利用</strong>
+    <div class="container">
+        <a href="index.html" class="home-link">← ホームに戻る</a>
+        <div class="privacy-container">
+            <strong>プライバシーポリシー</strong>
+            <p>このプライバシーポリシーは、Yuki Shibazaki（以下「サービス提供者」）がFreemiumサービスとして作成したモバイルデバイス向けDaily
+                Doアプリ（以下「アプリケーション」）に適用されます。本サービスは「現状有姿」で提供されます。</p><br><strong>情報の収集と利用</strong>
     <p>アプリケーションは、ダウンロードおよび使用時に情報を収集します。この情報には以下が含まれる場合があります：</p>
     <ul>
         <li>お使いのデバイスのインターネットプロトコルアドレス（IPアドレスなど）</li>
@@ -127,6 +128,8 @@
     <hr>
     <p>このプライバシーポリシーページは<a href="https://app-privacy-policy-generator.nisrulz.com/" target="_blank"
             rel="noopener noreferrer">App Privacy Policy Generator</a>によって生成されました</p>
+        </div>
+    </div>
 </body>
 
 </html>

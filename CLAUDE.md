@@ -137,3 +137,21 @@ HibitoTests/
 - TodoListViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
 - デバッグメニューはDEBUG環境でのみ表示される
 - テストファイルは本体のディレクトリ構造に合わせて整理されている
+
+## Webサイト（Cloudflare Pages）
+
+### 概要
+プロジェクトのWebサイトはCloudflare PagesでホスティングされGitHub連携により自動デプロイされています。
+
+### ディレクトリ構造
+```
+public/
+├── _headers          # セキュリティヘッダー設定
+├── privacy.html      # プライバシーポリシー（英語版）
+└── privacy_ja.html   # プライバシーポリシー（日本語版）
+```
+
+### デプロイ
+- GitHubリポジトリとCloudflare Pagesが連携済み
+- `public/`ディレクトリの内容が自動的にデプロイされる
+- プッシュ時に自動デプロイが実行される
