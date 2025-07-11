@@ -81,19 +81,17 @@ swift format lint --recursive .
 ```
 Hibito/
 ├── HibitoApp.swift          # アプリエントリーポイント、SwiftDataコンテナ設定
+├── ModelContainerManager.swift  # SwiftDataコンテナの管理
 ├── Extensions/
 │   └── Date+Extensions.swift   # 日付判定用の拡張機能
 ├── Models/
 │   └── TodoItem.swift      # @Modelマクロ使用のデータモデル
-├── Services/
-│   └── AutoResetService.swift  # 日次リセット機能
-├── Utilities/
-│   └── OrderingUtility.swift   # タスクの並び替え用ユーティリティ
+├── ViewModels/
+│   └── TodoListViewModel.swift # メインViewのViewModel
 ├── Views/
-│   ├── TodoListView.swift  # メインUI（SwiftUI）、データの直接操作
+│   ├── TodoListView.swift  # メインUI（SwiftUI）
 │   └── DebugMenuView.swift # デバッグメニュー（DEBUG環境のみ）
-├── ViewModels/             # 空（未使用）
-└── Managers/               # 空（未使用）
+└── Info.plist              # アプリ設定ファイル
 ```
 
 ### テスト構造
@@ -101,17 +99,14 @@ Hibito/
 HibitoTests/
 ├── Extensions/
 │   └── Date+ExtensionsTests.swift  # Date+Extensions.swiftのテスト
-├── Services/
-│   └── AutoResetServiceTests.swift # AutoResetService.swiftのテスト
-├── Utilities/
-│   └── OrderingUtilityTests.swift  # OrderingUtility.swiftのテスト
-└── HibitoTests.swift       # 基本テスト
+└── ViewModels/
+    └── TodoListViewModelTests.swift # TodoListViewModel.swiftのテスト
 ```
 
 ### 主要な技術スタック
 - **UI**: SwiftUI
 - **データモデル**: SwiftData（`@Model`マクロ）
-- **データアクセス**: `@Query`と`@Environment(\.modelContext)`を使用
+- **データアクセス**: ViewModelパターンでModelContextを経由
 - **最小OS**: iOS 18.5+, macOS 14.0+
 - **コードフォーマット**: swift format（pre-commit hook設定済み）
 
@@ -122,7 +117,7 @@ HibitoTests/
 - ドラッグ&ドロップによる並び替え
 - ダブルタップでのインライン編集
 - **データ永続化**（SwiftDataによる永続化実装済み）
-- **日次リセット機能**（AutoResetServiceで0時に自動リセット）
+- ViewModelパターンによるデータ管理
 - デバッグメニュー（手動リセット、タスク生成機能）
 - ソフトウェアキーボード関連の改善
   - 改行追加時にキーボードが閉じない
@@ -130,11 +125,12 @@ HibitoTests/
   - コンテンツタップでキーボードを閉じる
 
 #### 未実装の重要機能
-1. **同期機能**: CloudKit統合によるデバイス間同期
+1. **日次リセット機能**: 0時に全タスクを自動的に消去する機能
+2. **同期機能**: CloudKit統合によるデバイス間同期
 
 ### 注意事項
-- `Item.swift`は未使用のため、将来削除予定
-- TodoListViewが直接SwiftDataとやり取りしており、ViewModelは使用していない
+- ViewModelパターンを採用（TodoListViewModel）
+- ModelContainerManagerによりSwiftDataコンテナを管理
 - デバッグメニューはDEBUG環境でのみ表示される
 - テストファイルは本体のディレクトリ構造に合わせて整理されている
 
@@ -147,6 +143,8 @@ HibitoTests/
 ```
 public/
 ├── _headers          # セキュリティヘッダー設定
+├── index.html        # ランディングページ
+├── style.css         # スタイルシート
 ├── privacy.html      # プライバシーポリシー（英語版）
 └── privacy_ja.html   # プライバシーポリシー（日本語版）
 ```
