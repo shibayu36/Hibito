@@ -115,7 +115,7 @@ mcp__XcodeBuildMCP__test_sim_name_proj({
   simulatorName: "iPhone 16",
   extraArgs: [
     "-only-testing", "HibitoTests/SettingsViewModelTests",
-    "-only-testing", "HibitoTests/Date+ExtensionsTests"
+    "-only-testing", "HibitoTests/SettingsRepositoryTests"
   ]
 })
 
@@ -393,15 +393,14 @@ class SettingsViewModel {
 Hibito/
 ├── HibitoApp.swift          # アプリエントリーポイント、SwiftDataコンテナ設定
 ├── ModelContainerManager.swift  # SwiftDataコンテナの管理
-├── Extensions/
-│   └── Date+Extensions.swift   # 日付判定用の拡張機能
 ├── Models/
 │   ├── Settings.swift      # 設定データモデル
 │   └── TodoItem.swift      # TODOアイテムデータモデル
 ├── Repositories/
 │   └── SettingsRepository.swift # 設定データのSwiftDataアクセス層
 ├── ViewModels/
-│   └── TodoListViewModel.swift # メインViewのViewModel
+│   ├── TodoListViewModel.swift # メインViewのViewModel
+│   └── SettingsViewModel.swift # 設定画面のViewModel
 ├── Views/
 │   ├── TodoListView.swift  # メインUI（SwiftUI）
 │   ├── SettingsView.swift  # 設定画面
@@ -412,12 +411,11 @@ Hibito/
 ### テスト構造
 ```
 HibitoTests/
-├── Extensions/
-│   └── Date+ExtensionsTests.swift  # Date+Extensions.swiftのテスト
 ├── Repositories/
 │   └── SettingsRepositoryTests.swift # SettingsRepository.swiftのテスト
 └── ViewModels/
-    └── TodoListViewModelTests.swift # TodoListViewModel.swiftのテスト
+    ├── TodoListViewModelTests.swift # TodoListViewModel.swiftのテスト
+    └── SettingsViewModelTests.swift # SettingsViewModel.swiftのテスト
 ```
 
 ### 主要な技術スタック
