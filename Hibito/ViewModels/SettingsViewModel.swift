@@ -6,13 +6,14 @@ import Foundation
 class SettingsViewModel {
   private let settingsRepository: SettingsRepository
 
-  init(settingsRepository: SettingsRepository) {
-    self.settingsRepository = settingsRepository
+  var resetTime: Int = 0 {
+    didSet {
+      settingsRepository.updateResetTime(resetTime)
+    }
   }
 
-  /// リセット時間の取得・設定
-  var resetTime: Int {
-    get { settingsRepository.getResetTime() }
-    set { settingsRepository.updateResetTime(newValue) }
+  init(settingsRepository: SettingsRepository) {
+    self.settingsRepository = settingsRepository
+    self.resetTime = settingsRepository.getResetTime()
   }
 }
