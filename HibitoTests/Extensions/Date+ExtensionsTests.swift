@@ -56,4 +56,45 @@ struct DateExtensionsTests {
     let yesterdayEndOfDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: yesterday)!
     #expect(yesterdayEndOfDay.isBeforeToday() == true)
   }
+
+  @Suite("testIsBeforeTodayTime")
+  struct IsBeforeTodayTimeTests {
+    @Test func 当日の指定時刻より前ならtrue() async throws {
+      let calendar = Calendar.current
+      let targetTime = calendar.date(bySettingHour: 5, minute: 0, second: 0, of: Date())!
+      #expect(targetTime.isBeforeTodayTime(hour: 6) == true)
+    }
+
+    @Test func 前日ならtrue() async throws {
+      let calendar = Calendar.current
+      let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())!
+      let targetTime = calendar.date(bySettingHour: 5, minute: 0, second: 0, of: yesterday)!
+      #expect(targetTime.isBeforeTodayTime(hour: 6) == true)
+    }
+
+    @Test func 指定時間の一分前ならtrue() async throws {
+      let calendar = Calendar.current
+      let oneMinuteAgo = calendar.date(bySettingHour: 4, minute: 59, second: 59, of: Date())!
+      #expect(oneMinuteAgo.isBeforeTodayTime(hour: 5) == true)
+    }
+
+    @Test func 当日の指定時刻より後ならfalse() async throws {
+      let calendar = Calendar.current
+      let targetTime = calendar.date(bySettingHour: 5, minute: 0, second: 0, of: Date())!
+      #expect(targetTime.isBeforeTodayTime(hour: 4) == false)
+    }
+
+    @Test func 明日ならfalse() async throws {
+      let calendar = Calendar.current
+      let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+      let targetTime = calendar.date(bySettingHour: 5, minute: 0, second: 0, of: tomorrow)!
+      #expect(targetTime.isBeforeTodayTime(hour: 6) == false)
+    }
+
+    @Test func 指定時間の一分後ならfalse() async throws {
+      let calendar = Calendar.current
+      let oneMinuteAfter = calendar.date(bySettingHour: 5, minute: 1, second: 0, of: Date())!
+      #expect(oneMinuteAfter.isBeforeTodayTime(hour: 5) == false)
+    }
+  }
 }
