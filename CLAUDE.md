@@ -136,6 +136,16 @@ swift format lint --recursive .
 - **ドメイン知識の適切な配置**：アプリ固有の概念は適切な層（Repository、ViewModel）に配置
 - **命名による設計確認**：メソッド名やクラス名で責務の不整合に気づく仕組み
 
+#### 外部インターフェース設計の原則
+- **内部実装の完全な隠蔽**：privateメソッドで内部実装を隠し、必要最小限のAPIのみ公開
+- **API設計の最小化**：「何を隠すか」も「何を見せるか」と同じくらい重要
+- **利用者視点でのインターフェース**：内部の実装詳細ではなく、利用者が必要とする操作を基準にAPI設計
+- **実装レベルのコードレビュー観点**：
+  - 責務を説明するコメントの適切な配置
+  - publicメソッドには簡潔なコメント、privateメソッドは必要に応じて
+  - メソッド配置順序（public → private）
+  - 無駄な変数代入の回避
+
 #### 設計レビューの観点
 1. **命名の妥当性**：なぜその名前なのか、役割は明確か
 2. **テスタビリティ**：単体テストが書きやすいか、依存関係は注入可能か
@@ -157,6 +167,15 @@ swift format lint --recursive .
 - **1ステップ1テスト**：特定のロジック実装とテストを1セットにして細かくステップ分け
 - **テストの粒度**：基本ケース→エッジケース→統合テストの段階的アプローチ
 - **テスト要否の判断**：@Modelクラスなどただのデータコンテナはテスト不要
+
+#### テスト粒度の具体的な判断基準
+- **内部がシンプルなら最小限のテスト**：複雑でないロジックに対して過剰なテストは避ける
+- **効果的なテストの選択**：多数のテストより、重要な動作を確認する効果的なテストを優先
+- **メンテナンスコストの考慮**：過剰なテストは逆にメンテナンスコストを上げるため、必要最小限に抑える
+- **ユーザーフローを意識したテスト設計**：
+  - update → get → update → getのような実際の使用パターンを反映
+  - 単純な単体テストではなく、「ユーザーが実際にやりそうな操作」をテスト
+  - 複数の操作の組み合わせでの動作確認
 
 #### テストの表現力
 - **テストメソッド名は仕様**：テストメソッド名で何をテストしているかを明確に表現
@@ -198,11 +217,15 @@ Hibito/
 ├── Extensions/
 │   └── Date+Extensions.swift   # 日付判定用の拡張機能
 ├── Models/
-│   └── TodoItem.swift      # @Modelマクロ使用のデータモデル
+│   ├── Settings.swift      # 設定データモデル
+│   └── TodoItem.swift      # TODOアイテムデータモデル
+├── Repositories/
+│   └── SettingsRepository.swift # 設定データのSwiftDataアクセス層
 ├── ViewModels/
 │   └── TodoListViewModel.swift # メインViewのViewModel
 ├── Views/
 │   ├── TodoListView.swift  # メインUI（SwiftUI）
+│   ├── SettingsView.swift  # 設定画面
 │   └── DebugMenuView.swift # デバッグメニュー（DEBUG環境のみ）
 └── Info.plist              # アプリ設定ファイル
 ```
@@ -212,6 +235,8 @@ Hibito/
 HibitoTests/
 ├── Extensions/
 │   └── Date+ExtensionsTests.swift  # Date+Extensions.swiftのテスト
+├── Repositories/
+│   └── SettingsRepositoryTests.swift # SettingsRepository.swiftのテスト
 └── ViewModels/
     └── TodoListViewModelTests.swift # TodoListViewModel.swiftのテスト
 ```
@@ -219,27 +244,10 @@ HibitoTests/
 ### 主要な技術スタック
 - **UI**: SwiftUI
 - **データモデル**: SwiftData（`@Model`マクロ）
-- **データアクセス**: ViewModelパターンでModelContextを経由
+- **データアクセス**: ViewModelパターン + Repositoryパターンのハイブリッド構成
 - **最小OS**: iOS 18.5+, macOS 14.0+
 - **コードフォーマット**: swift format（pre-commit hook設定済み）
 
-### 現在の実装状況
-
-#### 実装済み
-- TODOリストの基本機能（追加、編集、削除、完了切り替え）
-- ドラッグ&ドロップによる並び替え
-- ダブルタップでのインライン編集
-- **データ永続化**（SwiftDataによる永続化実装済み）
-- ViewModelパターンによるデータ管理
-- デバッグメニュー（手動リセット、タスク生成機能）
-- ソフトウェアキーボード関連の改善
-  - 改行追加時にキーボードが閉じない
-  - TextFieldとキーボード間の適切な間隔
-  - コンテンツタップでキーボードを閉じる
-
-#### 未実装の重要機能
-1. **日次リセット機能**: 0時に全タスクを自動的に消去する機能
-2. **同期機能**: CloudKit統合によるデバイス間同期
 
 ### 注意事項
 - ViewModelパターンを採用（TodoListViewModel）
