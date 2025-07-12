@@ -12,10 +12,12 @@ import SwiftData
 @MainActor
 class TodoListViewModel {
   private let modelContext: ModelContext
+  private let settingsRepository: SettingsRepository
   private(set) var todos: [TodoItem] = []
 
-  init(modelContext: ModelContext) {
+  init(modelContext: ModelContext, settingsRepository: SettingsRepository) {
     self.modelContext = modelContext
+    self.settingsRepository = settingsRepository
     loadTodos()
   }
 
@@ -102,16 +104,19 @@ class TodoListViewModel {
     }
   }
 
-  /// 昨日以前に作成されたTodoアイテムを削除します（日次リセット機能）
-  /// - Note: 今日作成されたアイテムは削除されません
+  /// 設定された時間より前に作成されたTodoアイテムを削除します（日次リセット機能）
+  /// - Note: 設定時間より後に作成されたアイテムは削除されません
   /// - Note: 削除対象がない場合は何も実行されません
   func performReset() {
     let descriptor = FetchDescriptor<TodoItem>()
     guard let allItems = try? modelContext.fetch(descriptor) else { return }
 
-    // 昨日以前に作成されたタスクを特定
+    // 設定されたリセット時間を取得
+    let resetTime = settingsRepository.getResetTime()
+
+    // 設定時間より前に作成されたタスクを特定
     let tasksToDelete = allItems.filter { item in
-      item.createdAt.isBeforeToday()
+      item.createdAt.isBeforeTodayTime(hour: resetTime)
     }
 
     // 古いタスクがない場合は何もしない

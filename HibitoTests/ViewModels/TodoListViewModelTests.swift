@@ -17,7 +17,7 @@ struct TodoListViewModelTests {
   /// - Returns: 作成されたModelContext
   @MainActor
   private func createTestContainer() throws -> ModelContainer {
-    let schema = Schema([TodoItem.self])
+    let schema = Schema([TodoItem.self, Settings.self])
     let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: [config])
     return container
@@ -27,7 +27,10 @@ struct TodoListViewModelTests {
   @Test
   func Todo追加から完了切り替えと削除までの基本操作() async throws {
     let container = try createTestContainer()
-    let viewModel = TodoListViewModel(modelContext: container.mainContext)
+    let modelContext = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: modelContext)
+    let viewModel = TodoListViewModel(
+      modelContext: modelContext, settingsRepository: settingsRepository)
 
     // 初期状態: Todoリストが空
     #expect(viewModel.todos.isEmpty)
@@ -65,7 +68,10 @@ struct TodoListViewModelTests {
   @Test
   func 空文字やスペースのみのTodoは追加されない() async throws {
     let container = try createTestContainer()
-    let viewModel = TodoListViewModel(modelContext: container.mainContext)
+    let modelContext = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: modelContext)
+    let viewModel = TodoListViewModel(
+      modelContext: modelContext, settingsRepository: settingsRepository)
 
     // 空文字を追加
     viewModel.addTodo(content: "")
@@ -89,7 +95,10 @@ struct TodoListViewModelTests {
   @Test
   func Todoの並び替えが正しく動作する() async throws {
     let container = try createTestContainer()
-    let viewModel = TodoListViewModel(modelContext: container.mainContext)
+    let modelContext = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: modelContext)
+    let viewModel = TodoListViewModel(
+      modelContext: modelContext, settingsRepository: settingsRepository)
 
     // 4つのTodoを追加
     viewModel.addTodo(content: "タスク1")
@@ -131,7 +140,8 @@ struct TodoListViewModelTests {
   func 昨日作成されたTodoはすべて削除される() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
-    let viewModel = TodoListViewModel(modelContext: context)
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
 
     // 昨日のTodoを3つ作成
     let yesterdayTodo1 = TodoItem(content: "昨日のタスク1", order: 1.0)
@@ -162,7 +172,8 @@ struct TodoListViewModelTests {
   func 今日作成されたTodoはすべて残る() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
-    let viewModel = TodoListViewModel(modelContext: context)
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
 
     // 今日のTodoを3つ作成
     viewModel.addTodo(content: "今日のタスク1")
@@ -184,7 +195,8 @@ struct TodoListViewModelTests {
   func calculateOrderValue_先頭に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
-    let viewModel = TodoListViewModel(modelContext: context)
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
 
     let items = [
       TodoItem(content: "タスク1", order: 1.0),
@@ -202,7 +214,8 @@ struct TodoListViewModelTests {
   func calculateOrderValue_末尾に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
-    let viewModel = TodoListViewModel(modelContext: context)
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
 
     let items = [
       TodoItem(content: "タスク1", order: 1.0),
@@ -220,7 +233,8 @@ struct TodoListViewModelTests {
   func calculateOrderValue_中間位置に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
-    let viewModel = TodoListViewModel(modelContext: context)
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
 
     let items = [
       TodoItem(content: "タスク1", order: 1.0),

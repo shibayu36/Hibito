@@ -12,9 +12,11 @@ import SwiftUI
 struct TodoListView: View {
   @Environment(\.scenePhase) private var scenePhase
 
-  @State private var viewModel = TodoListViewModel(
-    modelContext: ModelContainerManager.shared.mainContext
-  )
+  @State private var viewModel = {
+    let modelContext = ModelContainerManager.shared.mainContext
+    let settingsRepository = SettingsRepository(modelContext: modelContext)
+    return TodoListViewModel(modelContext: modelContext, settingsRepository: settingsRepository)
+  }()
 
   // 新規Todo入力の状態管理
   @State private var newItemText = ""
