@@ -180,6 +180,34 @@ swift format lint --recursive .
   - メソッド配置順序（public → private）
   - 無駄な変数代入の回避
 
+#### コメントの適切な使い分け
+**⚠️ 重要**: コメントは必要最小限に抑え、コードを見てすぐに分かることはコメント化しない
+
+**コメントを書く場合の限定ケース**:
+1. **公開APIの説明**: publicメソッドなどを説明するドキュメントとして
+2. **背景情報の補足**: コード内容に表れていない背景がある場合
+3. **複雑なロジックの説明**: 複雑なコードでやりたいことの理解が難しく、説明が必要な場合
+4. **大規模コードのセクション分け**: 100行以上のコードで、セクション分けをした上で説明を書きたい場合
+
+**例**:
+```swift
+// ❌ 不要なコメント（コードを見れば分かる）
+var resetTime: Int = 0 {
+    didSet {
+        // ローカル状態の変更をRepositoryに反映
+        repository.updateResetTime(resetTime)
+    }
+}
+
+// ✅ 適切なコメント（背景情報）
+var resetTime: Int = 0 {
+    didSet {
+        // UIレスポンシブ性のためにローカル状態とRepository状態を同期
+        repository.updateResetTime(resetTime)
+    }
+}
+```
+
 #### 設計レビューの観点
 1. **命名の妥当性**：なぜその名前なのか、役割は明確か
 2. **テスタビリティ**：単体テストが書きやすいか、依存関係は注入可能か
@@ -233,6 +261,45 @@ class SettingsRepository {  // @MainActorが無い！
 
 **依存関係の伝播**:
 SwiftData → Repository → ViewModel → View の順で@MainActorが伝播する。どこか一箇所でも抜けると、コンパイルエラーまたはランタイムクラッシュが発生する。
+
+#### @ObservableViewModelでのリアルタイムUI更新
+**⚠️ 重要**: @ObservableパターンでのUIリアルタイム更新には適切なプロパティ設計が必要
+
+**Stored Property vs Computed Propertyの使い分け**:
+- **Stored Property**: @ObservableによるUI更新が正しく動作する
+- **Computed Property**: SwiftUIがプロパティ変更を検知できず、UI更新が行われない場合がある
+
+**実装例**:
+```swift
+@Observable
+@MainActor
+class SettingsViewModel {
+    private let repository: SettingsRepository
+    
+    // ✅ リアルタイム更新対応: Stored Property + didSet
+    var resetTime: Int = 0 {
+        didSet {
+            repository.updateResetTime(resetTime)
+        }
+    }
+    
+    // ❌ UI更新されない: Computed Property
+    var resetTime: Int {
+        get { repository.getResetTime() }
+        set { repository.updateResetTime(newValue) }
+    }
+    
+    init(repository: SettingsRepository) {
+        self.repository = repository
+        self.resetTime = repository.getResetTime()
+    }
+}
+```
+
+**設計のポイント**:
+- **UIレスポンシブ性とデータ整合性の両立**: ViewModelにローカル状態を持ちつつ、didSetでRepository更新を自動実行
+- **初期化時の同期**: ViewModelの初期化時にRepositoryから現在値をローカル状態に読み込み
+- **二重状態管理の受容**: UIの応答性を保つためにはViewModel層とRepository層での状態の二重管理が必要な場合がある
 
 ## 開発フロー
 
