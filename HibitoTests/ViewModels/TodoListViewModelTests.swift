@@ -11,11 +11,11 @@ import Testing
 
 @testable import Hibito
 
+@MainActor
 struct TodoListViewModelTests {
 
   /// テスト用のin-memoryModelContextを作成します
   /// - Returns: 作成されたModelContext
-  @MainActor
   private func createTestContainer() throws -> ModelContainer {
     let schema = Schema([TodoItem.self, Settings.self])
     let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
@@ -23,7 +23,6 @@ struct TodoListViewModelTests {
     return container
   }
 
-  @MainActor
   @Test
   func Todo追加から完了切り替えと削除までの基本操作() async throws {
     let container = try createTestContainer()
@@ -64,7 +63,6 @@ struct TodoListViewModelTests {
     #expect(viewModel.todos[0].content == "タスク2")
   }
 
-  @MainActor
   @Test
   func 空文字やスペースのみのTodoは追加されない() async throws {
     let container = try createTestContainer()
@@ -91,7 +89,6 @@ struct TodoListViewModelTests {
     #expect(viewModel.todos[0].content == "有効なタスク")
   }
 
-  @MainActor
   @Test
   func Todoの並び替えが正しく動作する() async throws {
     let container = try createTestContainer()
@@ -135,7 +132,6 @@ struct TodoListViewModelTests {
     #expect(viewModel.todos[3].content == "タスク4")
   }
 
-  @MainActor
   @Test
   func 昨日作成されたTodoはすべて削除される() async throws {
     let container = try createTestContainer()
@@ -167,7 +163,6 @@ struct TodoListViewModelTests {
     #expect(viewModel.todos.isEmpty)
   }
 
-  @MainActor
   @Test
   func 今日作成されたTodoはすべて残る() async throws {
     let container = try createTestContainer()
@@ -190,7 +185,6 @@ struct TodoListViewModelTests {
     #expect(viewModel.todos[2].content == "今日のタスク3")
   }
 
-  @MainActor
   @Test
   func calculateOrderValue_先頭に移動() async throws {
     let container = try createTestContainer()
@@ -209,7 +203,6 @@ struct TodoListViewModelTests {
     #expect(result == 0.0)  // 1.0 - 1.0
   }
 
-  @MainActor
   @Test
   func calculateOrderValue_末尾に移動() async throws {
     let container = try createTestContainer()
@@ -228,7 +221,6 @@ struct TodoListViewModelTests {
     #expect(result == 4.0)  // 3.0 + 1.0
   }
 
-  @MainActor
   @Test
   func calculateOrderValue_中間位置に移動() async throws {
     let container = try createTestContainer()
