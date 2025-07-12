@@ -187,6 +187,53 @@ swift format lint --recursive .
 4. **既存コードとの一貫性**：既存のパターンに合致するか
 5. **エラーハンドリング**：適切なフォールバックがあるか
 
+### SwiftUI/SwiftData実装の重要な注意点
+
+#### SwiftDataアクセスには@MainActorが必須
+**⚠️ 極めて重要**: SwiftDataを使用するすべてのクラスには@MainActorが必要
+
+**基本ルール**:
+- **Repository層**: SwiftDataに直接アクセスするクラスには必ず`@MainActor`を付ける
+- **ViewModel層**: Repository層を呼び出すViewModelにも`@MainActor`が必要
+- **テスト層**: Repository/ViewModelをテストするテストクラスにも`@MainActor`が必要
+
+**実装例**:
+```swift
+// ✅ 正しい実装
+@MainActor
+class SettingsRepository {
+    private let modelContext: ModelContext
+    // SwiftDataアクセス処理...
+}
+
+@Observable
+@MainActor
+class SettingsViewModel {
+    private let settingsRepository: SettingsRepository
+    // ViewModelロジック...
+}
+
+@MainActor
+struct SettingsRepositoryTests {
+    // テストケース...
+}
+```
+
+**よくある間違い**:
+```swift
+// ❌ @MainActorがないとランタイムクラッシュ
+class SettingsRepository {  // @MainActorが無い！
+    private let modelContext: ModelContext
+    func getSettings() -> Settings {
+        // クラッシュの原因
+        try? modelContext.fetch(descriptor).first
+    }
+}
+```
+
+**依存関係の伝播**:
+SwiftData → Repository → ViewModel → View の順で@MainActorが伝播する。どこか一箇所でも抜けると、コンパイルエラーまたはランタイムクラッシュが発生する。
+
 ## 開発フロー
 
 ### TDDアプローチ
