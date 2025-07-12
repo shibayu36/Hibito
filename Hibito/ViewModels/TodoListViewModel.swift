@@ -12,10 +12,12 @@ import SwiftData
 @MainActor
 class TodoListViewModel {
   private let modelContext: ModelContext
+  private let settingsRepository: SettingsRepository
   private(set) var todos: [TodoItem] = []
 
-  init(modelContext: ModelContext) {
+  init(modelContext: ModelContext, settingsRepository: SettingsRepository) {
     self.modelContext = modelContext
+    self.settingsRepository = settingsRepository
     loadTodos()
   }
 
@@ -102,16 +104,42 @@ class TodoListViewModel {
     }
   }
 
-  /// 昨日以前に作成されたTodoアイテムを削除します（日次リセット機能）
-  /// - Note: 今日作成されたアイテムは削除されません
+  /// 最後のリセット時刻を取得します
+  /// 現在時刻がリセット時刻より前の場合は昨日のリセット時刻、
+  /// リセット時刻以降の場合は今日のリセット時刻を返します
+  internal func getLastResetTime(now: Date) -> Date {
+    let calendar = Calendar.current
+    let resetHour = settingsRepository.getResetTime()
+
+    // 今日の指定時刻を作成
+    guard
+      let todayResetTime = calendar.date(bySettingHour: resetHour, minute: 0, second: 0, of: now)
+    else {
+      return now
+    }
+
+    // 現在時刻がリセット時刻より前なら昨日のリセット時刻
+    if now < todayResetTime {
+      return calendar.date(byAdding: .day, value: -1, to: todayResetTime) ?? todayResetTime
+    }
+
+    // リセット時刻以降なら今日のリセット時刻
+    return todayResetTime
+  }
+
+  /// 設定された時間より前に作成されたTodoアイテムを削除します（日次リセット機能）
+  /// - Note: 最後のリセット時刻より後に作成されたアイテムは削除されません
   /// - Note: 削除対象がない場合は何も実行されません
   func performReset() {
     let descriptor = FetchDescriptor<TodoItem>()
     guard let allItems = try? modelContext.fetch(descriptor) else { return }
 
-    // 昨日以前に作成されたタスクを特定
+    // 最後のリセット時刻を取得
+    let lastResetTime = getLastResetTime(now: Date())
+
+    // 最後のリセット時刻より前に作成されたタスクを特定
     let tasksToDelete = allItems.filter { item in
-      item.createdAt.isBeforeToday()
+      item.createdAt < lastResetTime
     }
 
     // 古いタスクがない場合は何もしない

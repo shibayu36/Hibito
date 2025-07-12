@@ -7,6 +7,10 @@
           {
             "type": "command",
             "command": "jq -r '.tool_input.file_path | select(endswith(\".html\") or endswith(\".css\"))' | xargs -r npx prettier --write"
+          },
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path | select(endswith(\".swift\"))' | xargs -r swift format -i"
           }
         ]
       }
