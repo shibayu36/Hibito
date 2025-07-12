@@ -3,6 +3,7 @@ import Testing
 
 @testable import Hibito
 
+@MainActor
 struct SettingsRepositoryTests {
 
   @Test("保存していないときはデフォルトで0を返す")

@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 
 /// アプリ設定データのSwiftDataアクセスを担当するRepository
+@MainActor
 class SettingsRepository {
   private let modelContext: ModelContext
 

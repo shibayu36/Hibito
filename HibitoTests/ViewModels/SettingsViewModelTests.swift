@@ -3,6 +3,7 @@ import Testing
 
 @testable import Hibito
 
+@MainActor
 struct SettingsViewModelTests {
 
   @Test("resetTimeプロパティのバインディング確認")
