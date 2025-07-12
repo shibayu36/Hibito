@@ -240,4 +240,59 @@ struct TodoListViewModelTests {
     #expect(result == 1.5)  // (1.0 + 2.0) / 2.0
   }
 
+  @Test
+  func getLastResetTime_0時に指定されていた時() async throws {
+    let container = try createTestContainer()
+    let context = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
+
+    // リセット時刻を0時に設定
+    settingsRepository.updateResetTime(0)
+
+    let todayMidnight = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+
+    // 必ず当日の0時を返す
+    let now = Date()
+
+    // 1時
+    let lastResetTime1 = viewModel.getLastResetTime(
+      now: Calendar.current.date(bySettingHour: 1, minute: 0, second: 0, of: now)!)
+    #expect(lastResetTime1 == todayMidnight)
+
+    // 12時
+    let lastResetTime12 = viewModel.getLastResetTime(
+      now: Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: now)!)
+    #expect(lastResetTime12 == todayMidnight)
+
+    // 23時
+    let lastResetTime23 = viewModel.getLastResetTime(
+      now: Calendar.current.date(bySettingHour: 23, minute: 0, second: 0, of: now)!)
+    #expect(lastResetTime23 == todayMidnight)
+  }
+
+  @Test
+  func getLastResetTime_12時に指定されていた時() async throws {
+    let container = try createTestContainer()
+    let context = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(modelContext: context, settingsRepository: settingsRepository)
+
+    // リセット時刻を12時に設定
+    settingsRepository.updateResetTime(12)
+
+    let now = Date()
+
+    // 当日の11時なら前日の12時を返す
+    let todayNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: now)!
+    let yesterdayNoon = Calendar.current.date(byAdding: .day, value: -1, to: todayNoon)!
+    let lastResetTime11 = viewModel.getLastResetTime(
+      now: Calendar.current.date(bySettingHour: 11, minute: 0, second: 0, of: now)!)
+    #expect(lastResetTime11 == yesterdayNoon)
+
+    // 当日の13時なら当日の12時を返す
+    let lastResetTime13 = viewModel.getLastResetTime(
+      now: Calendar.current.date(bySettingHour: 13, minute: 0, second: 0, of: now)!)
+    #expect(lastResetTime13 == todayNoon)
+  }
 }
