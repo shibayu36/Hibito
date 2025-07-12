@@ -82,17 +82,51 @@ xcodebuild -scheme Hibito -sdk iphonesimulator -destination 'platform=iOS Simula
 ```
 
 ### テスト
-Swift Testingフレームワーク（`@Test`マクロ）を使用しています。
+Swift Testingフレームワーク（`@Test`マクロ）を使用しています。XcodeBuildMCPを使ってテストを実行します。
 
-```bash
-# 全テスト実行
-xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16'
+```javascript
+// 全テスト実行
+mcp__XcodeBuildMCP__test_sim_name_proj({
+  projectPath: "Hibito.xcodeproj",
+  scheme: "Hibito",
+  simulatorName: "iPhone 16"
+})
 
-# 特定のテスト関数を実行
-xcodebuild test -scheme Hibito -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:HibitoTests/Extensions/Date+ExtensionsTests/testIsBeforeToday
+// 特定のテストクラス全体を実行
+mcp__XcodeBuildMCP__test_sim_name_proj({
+  projectPath: "Hibito.xcodeproj",
+  scheme: "Hibito",
+  simulatorName: "iPhone 16",
+  extraArgs: ["-only-testing", "HibitoTests/SettingsViewModelTests"]
+})
+
+// 特定のテストメソッドのみ実行（Swift Testing対応）
+mcp__XcodeBuildMCP__test_sim_name_proj({
+  projectPath: "Hibito.xcodeproj",
+  scheme: "Hibito",
+  simulatorName: "iPhone 16",
+  extraArgs: ["-only-testing", "HibitoTests/SettingsViewModelTests/testResetTimeUpdate"]
+})
+
+// 複数のテストクラスを指定
+mcp__XcodeBuildMCP__test_sim_name_proj({
+  projectPath: "Hibito.xcodeproj",
+  scheme: "Hibito",
+  simulatorName: "iPhone 16",
+  extraArgs: [
+    "-only-testing", "HibitoTests/SettingsViewModelTests",
+    "-only-testing", "HibitoTests/Date+ExtensionsTests"
+  ]
+})
+
+// シミュレータUUID指定（高速化）
+mcp__XcodeBuildMCP__test_sim_id_proj({
+  projectPath: "Hibito.xcodeproj",
+  scheme: "Hibito",
+  simulatorId: "98BDEC2F-67E8-4EE3-8024-AFF532E1E42F",
+  extraArgs: ["-only-testing", "HibitoTests/SettingsViewModelTests"]
+})
 ```
-
-swift testは使えないから、xcodebuild testを使うこと。
 
 ### コードフォーマット
 ```bash
