@@ -14,7 +14,7 @@ class ModelContainerManager {
   let modelContainer: ModelContainer
 
   private init() {
-    let schema = Schema([TodoItem.self])
+    let schema = Schema([TodoItem.self, Settings.self])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
     do {
