@@ -31,7 +31,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -44,7 +44,7 @@
 		94BD4B432DF8FBDD00FAACA9 /* Hibito */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */,
 			);
 			path = Hibito;
 			sourceTree = "<group>";
