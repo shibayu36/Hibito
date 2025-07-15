@@ -7,8 +7,8 @@ struct DateProviderTests {
 
   @Test("デフォルトで初期化した場合、何回呼んでも同じ値を返す")
   func testDefaultInitialization() {
-    let (_, reset) = DateProvider.setMock()
-    defer { reset() }
+    DateProvider.setMockDate()
+    defer { DateProvider.reset() }
 
     let firstCall = DateProvider.now
     let secondCall = DateProvider.now
@@ -19,8 +19,7 @@ struct DateProviderTests {
   @Test("Dateを渡して初期化した場合、何回呼んでも同じ値を返す")
   func testInitializationWithSpecificDate() {
     // 特定の日時で初期化（1970年1月12日 13:46:40 UTC）
-    var (mock, reset) = DateProvider.setMock()
-    mock.setDate("2025-01-12T13:46:40+09:00")
+    DateProvider.setMockDate(Date(timeIntervalSince1970: 1_000_000))
 
     let calendar = Calendar.current
     let expectedDate = calendar.date(
@@ -35,24 +34,14 @@ struct DateProviderTests {
     #expect(secondCall == expectedDate)
 
     // リセットしたら元に戻る
-    reset()
+    DateProvider.reset()
     #expect(DateProvider.now != expectedDate)
   }
 
   @Test("setDateでISO8601文字列を指定することで時刻を変更できる")
   func testSetDateWithISO8601String() {
-    var (mock, reset) = DateProvider.setMock()
-    mock.setDate("2025-01-14T15:30:00+09:00")
-    defer { reset() }
-
-    // 初期値を記録
-    let initialDate = DateProvider.now
-
-    mock.setDate("2025-01-14T15:30:00+09:00")
-    let updatedDate = DateProvider.now
-
-    // 時刻が変更されたことを確認
-    #expect(initialDate != updatedDate)
+    DateProvider.setMockDate("2025-01-14T15:30:00+09:00")
+    defer { DateProvider.reset() }
 
     let calendar = Calendar.current
     let expectedDate = calendar.date(
@@ -61,6 +50,6 @@ struct DateProviderTests {
         minute: 30,
         second: 0))!
 
-    #expect(updatedDate == expectedDate)
+    #expect(DateProvider.now == expectedDate)
   }
 }

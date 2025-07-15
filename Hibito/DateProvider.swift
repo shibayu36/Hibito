@@ -10,17 +10,18 @@ class DateProvider {
     current.now
   }
 
+  static func setMockDate(_ date: Date = Date()) {
+    current = MockDateProvider(date)
+  }
+
   /// テスト時などに現在のDateProviderを変更
-  static func setMock() -> (MockDateProvider, () -> Void) {
-    let provider = MockDateProvider()
-    let original = current
-    current = provider
-    return (
-      provider,
-      {
-        current = original
-      }
-    )
+  static func setMockDate(_ iso8601String: String) {
+    current = MockDateProvider(iso8601String)
+  }
+
+  /// テスト時にresetを呼ぶと、モックをリセットする
+  static func reset() {
+    current = SystemDateProvider()
   }
 }
 
@@ -43,8 +44,21 @@ struct MockDateProvider: DateProviderProtocol {
   private(set) var fixedDate: Date
   var now: Date { fixedDate }
 
-  init(fixedDate: Date = Date()) {
+  init(_ fixedDate: Date = Date()) {
     self.fixedDate = fixedDate
+  }
+
+  /// ISO8601形式の文字列から時刻を設定
+  /// - Parameter iso8601String: ISO8601形式の日時文字列 (例: "2025-01-14T10:30:00+09:00")
+  init(_ iso8601String: String) {
+    let formatter = ISO8601DateFormatter()
+    formatter.formatOptions = [.withInternetDateTime, .withTimeZone]
+
+    if let date = formatter.date(from: iso8601String) {
+      self.fixedDate = date
+    } else {
+      fatalError("Invalid date format: \(iso8601String)")
+    }
   }
 
   /// ISO8601形式の文字列から時刻を設定
