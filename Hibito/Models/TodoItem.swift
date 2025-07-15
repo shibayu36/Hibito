@@ -7,7 +7,7 @@ class TodoItem {
   var content: String = ""
   var isCompleted = false
   var order: Double = 0.0
-  var createdAt = Date()
+  var createdAt = DateProvider.now
 
   init(content: String = "", order: Double = 0.0) {
     self.content = content

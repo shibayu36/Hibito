@@ -281,7 +281,7 @@ struct TodoListViewModelTests {
     // リセット時刻を12時に設定
     settingsRepository.updateResetTime(12)
 
-    let now = Date()
+    let now = DateProvider.now
 
     // 当日の11時なら前日の12時を返す
     let todayNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: now)!

@@ -33,7 +33,9 @@
     // MARK: - Debug Methods
 
     private func createYesterdayTask() {
-      let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+      let yesterday =
+        Calendar.current.date(byAdding: .day, value: -1, to: DateProvider.now)
+        ?? DateProvider.now
       let maxOrder = viewModel.todos.last?.order ?? 0.0
       let item = TodoItem(content: "昨日のタスク", order: maxOrder + 1.0)
       item.createdAt = yesterday
