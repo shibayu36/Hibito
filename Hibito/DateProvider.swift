@@ -1,21 +1,45 @@
 import Foundation
 
+// このプロジェクトではDateProvider.now()から現在時刻を取得する
+// テスト時にはDateProvider.setCurrent()でモックを設定する
+class DateProvider {
+  static var current: DateProviderProtocol = SystemDateProvider()
+
+  /// 現在の時刻を取得
+  static var now: Date {
+    current.now
+  }
+
+  /// テスト時などに現在のDateProviderを変更
+  static func setMock() -> (MockDateProvider, () -> Void) {
+    let provider = MockDateProvider()
+    let original = current
+    current = provider
+    return (
+      provider,
+      {
+        current = original
+      }
+    )
+  }
+}
+
 /// 時刻取得を抽象化するプロトコル
 /// テスト時の時刻制御と本番時の実時刻取得を統一的に扱う
-protocol DateProvider {
+protocol DateProviderProtocol {
   /// 現在時刻を取得
   var now: Date { get }
 }
 
 /// 本番・実機用のDateProvider
 /// 実際のシステム時刻を返す
-struct SystemDateProvider: DateProvider {
+struct SystemDateProvider: DateProviderProtocol {
   var now: Date { Date() }
 }
 
 /// テスト用のDateProvider
 /// 固定された時刻を返すため、テスト時の時刻制御が可能
-struct MockDateProvider: DateProvider {
+struct MockDateProvider: DateProviderProtocol {
   private(set) var fixedDate: Date
   var now: Date { fixedDate }
 

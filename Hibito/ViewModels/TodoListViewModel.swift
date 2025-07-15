@@ -135,7 +135,7 @@ class TodoListViewModel {
     guard let allItems = try? modelContext.fetch(descriptor) else { return }
 
     // 最後のリセット時刻を取得
-    let lastResetTime = getLastResetTime(now: Date())
+    let lastResetTime = getLastResetTime(now: DateProvider.now)
 
     // 最後のリセット時刻より前に作成されたタスクを特定
     let tasksToDelete = allItems.filter { item in
