@@ -128,14 +128,15 @@ class TodoListViewModel {
   }
 
   /// 設定された時間より前に作成されたTodoアイテムを削除します（日次リセット機能）
+  /// - Parameter date: 基準となる現在時刻（デフォルトは現在時刻）
   /// - Note: 最後のリセット時刻より後に作成されたアイテムは削除されません
   /// - Note: 削除対象がない場合は何も実行されません
-  func performReset() {
+  func performReset(date: Date = Date()) {
     let descriptor = FetchDescriptor<TodoItem>()
     guard let allItems = try? modelContext.fetch(descriptor) else { return }
 
     // 最後のリセット時刻を取得
-    let lastResetTime = getLastResetTime(now: Date())
+    let lastResetTime = getLastResetTime(now: date)
 
     // 最後のリセット時刻より前に作成されたタスクを特定
     let tasksToDelete = allItems.filter { item in
