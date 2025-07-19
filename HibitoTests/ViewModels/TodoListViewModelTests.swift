@@ -186,6 +186,52 @@ struct TodoListViewModelTests {
   }
 
   @Test
+  func 設定したリセット時刻を超えるとその前に作成されたTodoはすべて削除される() async throws {
+    let container = try createTestContainer()
+    let context = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: context)
+
+    // リセット時刻を9時に設定
+    settingsRepository.updateResetTime(9)
+
+    let viewModel = TodoListViewModel(
+      modelContext: context,
+      settingsRepository: settingsRepository
+    )
+
+    // 基準時刻（今日の8:30）
+    let baseDate = Calendar.current.date(bySettingHour: 8, minute: 30, second: 0, of: Date())!
+
+    // 前日の22:00に作成されたTodo（削除対象になる予定）
+    let yesterdayTodo = TodoItem(content: "前日22時のタスク", order: 1.0)
+    yesterdayTodo.createdAt = Calendar.current.date(
+      byAdding: .day, value: -1,
+      to: Calendar.current.date(bySettingHour: 22, minute: 0, second: 0, of: baseDate)!)!
+    context.insert(yesterdayTodo)
+
+    // 当日の8:00に作成されたTodo（削除対象になる予定）
+    let todayTodo = TodoItem(content: "当日8時のタスク", order: 2.0)
+    todayTodo.createdAt = Calendar.current.date(
+      bySettingHour: 8, minute: 0, second: 0, of: baseDate)!
+    context.insert(todayTodo)
+
+    viewModel.loadTodos()
+    #expect(viewModel.todos.count == 2)
+
+    // 8:30にperformReset（リセット時刻前なので削除されない）
+    viewModel.performReset(date: baseDate)
+    #expect(viewModel.todos.count == 2)
+
+    // 時刻を9:30に変更（リセット時刻を超えた）
+    let afterResetDate = Calendar.current.date(
+      bySettingHour: 9, minute: 30, second: 0, of: baseDate)!
+
+    // 9:30にperformReset（リセット時刻を超えたので削除される）
+    viewModel.performReset(date: afterResetDate)
+    #expect(viewModel.todos.count == 0)
+  }
+
+  @Test
   func calculateOrderValue_先頭に移動() async throws {
     let container = try createTestContainer()
     let context = container.mainContext
