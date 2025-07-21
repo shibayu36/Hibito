@@ -37,47 +37,63 @@
 - **パフォーマンス**：バックグラウンド同期、UI応答性維持
 - **テスタビリティ**：既存テストは維持、同期ON/OFF切り替えのみテスト追加
 
-## 段階的実装計画
+## 実装TODOリスト
 
-### Phase 1: プロジェクト基盤設定
-- Xcode Capabilities追加（CloudKit）
-- Container ID設定: Xcodeプロジェクト設定で自動決定（.automatic使用）
-- Entitlements更新
-- Background Mode Remote Notifications確認
+### Phase 1: PoC実装（動作確認優先）
+**目的**: 理論と実践のギャップ確認、早期リスク発見、動作する最小実装
 
-### Phase 2: SwiftData CloudKit連携
-- `ModelContainerManager.swift`拡張
-- 起動時の設定に基づくModelConfiguration実装
-- 設定変更時はアプリ再起動を促すUI
+1. **プロジェクト設定**
+   - [ ] Xcode Capabilities追加（CloudKit）
+   - [ ] Entitlements更新（CloudKit権限追加）
 
-### Phase 3: データモデル整理
-- `Settings.swift`から`useCloudSync`を削除（UserDefaultsで管理）
-- シンプルなSwiftDataモデルに統一
+2. **最小限実装**
+   - [ ] UserDefaultsベースのiCloud同期ON/OFF切り替えUI追加
+   - [ ] ModelContainerManager修正（.automatic使用、UserDefaults参照）
 
-### Phase 4: Repository層拡張
-- `SettingsRepository.swift`にUserDefaults管理機能追加：
-  - UserDefaultsの依存性注入対応
-  - `getCloudSyncEnabled() -> Bool`（UserDefaults経由）
-  - `updateCloudSyncEnabled(_ enabled: Bool)`（UserDefaults経由）
-- SwiftDataとUserDefaultsの適切な分離
-- 既存APIは完全維持
+3. **動作確認**
+   - [ ] iOS Simulatorビルド、基本機能テスト
+   - [ ] 複数デバイス間での同期テスト実行
 
-### Phase 5: ViewModel層対応
-- `SettingsViewModel.swift`拡張：
-  - `useCloudSync`プロパティ追加
-  - 設定変更時の再起動促進UI
-  - 設定値の永続化処理
-- リアルタイムUI更新維持（Stored Property + didSet）
+### Phase 2: アーキテクチャ整理
+**目的**: PoCから綺麗な設計への移行
 
-### Phase 6: UI実装
-- `SettingsView.swift`に同期設定セクション追加：
-  - iCloud同期ON/OFFスイッチ
-  - 分かりやすい説明テキスト
-  - 設定変更時の再起動案内
+4. **データ層整理**
+   - [ ] Settings.swiftからuseCloudSync削除
+   - [ ] SettingsRepository拡張（UserDefaults注入対応）
+   - [ ] SettingsViewModel修正（Repository経由のUserDefaults操作）
 
-### Phase 7: 同期完了時のUI更新
-- `TodoListViewModel.swift`にModelContext.didSave通知追加
-- CloudKit同期完了時の自動UI更新（通知ベース）
+5. **品質確保**
+   - [ ] 既存テスト実行・修正
+
+### Phase 3: UI改善
+**目的**: ユーザー体験の向上
+
+6. **設定画面改善**
+   - [ ] 設定画面の同期スイッチUI改善（説明テキスト、再起動案内）
+   - [ ] 再起動促進アラート実装
+
+### Phase 4: 同期UI更新
+**目的**: CloudKitとの連携強化
+
+7. **自動更新機能**
+   - [ ] TodoListViewModelにModelContext.didSave通知追加
+   - [ ] CloudKit同期完了時の自動UI更新確認
+
+### Phase 5: テスト追加
+**目的**: 品質と保守性の確保
+
+8. **テスト実装**
+   - [ ] UserDefaults注入テスト（SettingsRepositoryTests）
+   - [ ] 同期ON/OFF切り替えテスト（SettingsViewModelTests）
+
+### Phase 6: 最終確認
+**目的**: リリース準備
+
+9. **総合確認**
+   - [ ] iOS Simulator向けビルドエラー確認
+   - [ ] 既存機能の動作維持確認
+   - [ ] デバイス間同期テスト（1分以内反映）
+   - [ ] オフライン時正常動作確認
 
 ## 技術仕様詳細
 
