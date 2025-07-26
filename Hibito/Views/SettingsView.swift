@@ -21,6 +21,14 @@ struct SettingsView: View {
         } footer: {
           Text("毎日\(viewModel.resetTime):00に、それより前に作成されたタスクが自動的に削除されます")
         }
+
+        Section {
+          Toggle("iCloud同期", isOn: $viewModel.useCloudSync)
+        } header: {
+          Text("データ同期")
+        } footer: {
+          Text("複数のデバイス間でTODOを同期します。変更を反映するにはアプリを再起動してください。")
+        }
       }
       .navigationTitle("設定")
       .navigationBarTitleDisplayMode(.inline)

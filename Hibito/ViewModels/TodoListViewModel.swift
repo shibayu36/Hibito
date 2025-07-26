@@ -5,6 +5,7 @@
 //  Created by Yuki Shibazaki on 2025/06/22.
 //
 
+import CoreData
 import Foundation
 import SwiftData
 
@@ -19,13 +20,82 @@ class TodoListViewModel {
     self.modelContext = modelContext
     self.settingsRepository = settingsRepository
     loadTodos()
+
+    setupSyncNotifications()
+  }
+
+  /// NSPersistentCloudKitContainer.eventChangedNotification通知を監視してTODO一覧を更新
+  private func setupSyncNotifications() {
+    NotificationCenter.default.addObserver(
+      forName: NSPersistentCloudKitContainer.eventChangedNotification,
+      object: nil,
+      queue: .main
+    ) { [weak self] notification in
+      guard let self = self else { return }
+      guard
+        let event = notification.userInfo?[
+          NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
+          as? NSPersistentCloudKitContainer.Event
+      else { return }
+
+      print("🔄 iCloud event: \(event)")
+
+      // Cloud -> Localの同期が成功した時にTodo更新
+      if event.type == .import && event.succeeded {
+        Task { @MainActor in
+          self.loadTodos()
+        }
+      }
+    }
+
+    // NotificationCenter.default.addObserver(
+    //   forName: ModelContext.didSave,
+    //   object: modelContext,
+    //   queue: .main
+    // ) { [weak self] notification in
+    //   print("🔄 didSave notification received!")
+
+    //   // 通知の詳細情報を出力
+    //   if let userInfo = notification.userInfo {
+    //     print("🔄 UserInfo keys: \(userInfo.keys)")
+    //     for (key, value) in userInfo {
+    //       print("🔄   \(key): \(value)")
+    //     }
+    //   }
+
+    //   // Notification objectの詳細
+    //   if let context = notification.object as? ModelContext {
+    //     print("🔄 Context: \(context)")
+    //     print("🔄 Has changes: \(context.hasChanges)")
+    //     print("🔄 Inserted count: \(context.insertedModelsArray.count)")
+    //     print("🔄 Updated count: \(context.changedModelsArray.count)")
+    //     print("🔄 Deleted count: \(context.deletedModelsArray.count)")
+
+    //     // 具体的に何が変更されたかを表示
+    //     for model in context.insertedModelsArray {
+    //       print("🔄 INSERTED: \(type(of: model)) - \(model)")
+    //     }
+    //     for model in context.changedModelsArray {
+    //       print("🔄 UPDATED: \(type(of: model)) - \(model)")
+    //     }
+    //     for model in context.deletedModelsArray {
+    //       print("🔄 DELETED: \(type(of: model)) - \(model)")
+    //     }
+    //   }
+
+    //   // loadTodos呼び出しをコメントアウトして無限ループを防ぐ
+    //   // self?.loadTodos()
+    //   // print("🔄 loadTodos() call skipped to prevent infinite loop")
+    // }
   }
 
   /// SwiftDataからTodoアイテムを読み込んでtodos配列を更新します
   /// order値でソートされた状態で取得されます
   func loadTodos() {
+    print("🔍 loadTodos() called")
     let descriptor = FetchDescriptor<TodoItem>(sortBy: [SortDescriptor(\.order)])
     todos = (try? modelContext.fetch(descriptor)) ?? []
+    print("🔍 loadTodos() completed. Count: \(todos.count)")
   }
 
   /// 新しいTodoアイテムを追加します
@@ -39,6 +109,12 @@ class TodoListViewModel {
     let newTodo = TodoItem(content: trimmedContent, order: maxOrder + 1.0)
     modelContext.insert(newTodo)
 
+    let timestamp = DateFormatter.localizedString(
+      from: Date(), dateStyle: .none, timeStyle: .medium)
+    print(
+      "➕ [\(timestamp)] [PID:\(ProcessInfo.processInfo.processIdentifier)] Todo inserted (autosave may trigger)"
+    )
+
     loadTodos()
   }
 
@@ -46,6 +122,12 @@ class TodoListViewModel {
   /// - Parameter todo: 完了状態を切り替えるTodoアイテム
   func toggleCompletion(for todo: TodoItem) {
     todo.isCompleted.toggle()
+    let timestamp = DateFormatter.localizedString(
+      from: Date(), dateStyle: .none, timeStyle: .medium)
+    print(
+      "💾 [\(timestamp)] [PID:\(ProcessInfo.processInfo.processIdentifier)] Saving after toggle completion"
+    )
+    try? modelContext.save()
     loadTodos()
   }
 
@@ -55,6 +137,13 @@ class TodoListViewModel {
   func deleteTodo(at index: Int) {
     guard index >= 0 && index < todos.count else { return }
     modelContext.delete(todos[index])
+
+    let timestamp = DateFormatter.localizedString(
+      from: Date(), dateStyle: .none, timeStyle: .medium)
+    print(
+      "🗑️ [\(timestamp)] [PID:\(ProcessInfo.processInfo.processIdentifier)] Todo deleted (autosave may trigger)"
+    )
+
     loadTodos()
   }
 
@@ -74,6 +163,11 @@ class TodoListViewModel {
     )
 
     movingItem.order = newOrder
+    let timestamp = DateFormatter.localizedString(
+      from: Date(), dateStyle: .none, timeStyle: .medium)
+    print(
+      "💾 [\(timestamp)] [PID:\(ProcessInfo.processInfo.processIdentifier)] Saving after move todo")
+    try? modelContext.save()
     loadTodos()
   }
 
@@ -152,6 +246,11 @@ class TodoListViewModel {
     }
 
     // 変更を保存
+    let timestamp = DateFormatter.localizedString(
+      from: Date(), dateStyle: .none, timeStyle: .medium)
+    print(
+      "💾 [\(timestamp)] [PID:\(ProcessInfo.processInfo.processIdentifier)] Saving after perform reset"
+    )
     try? modelContext.save()
 
     loadTodos()

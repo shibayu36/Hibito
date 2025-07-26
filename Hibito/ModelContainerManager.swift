@@ -15,7 +15,14 @@ class ModelContainerManager {
 
   private init() {
     let schema = Schema([TodoItem.self, Settings.self])
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+
+    let useCloudSync = UserDefaults.standard.bool(forKey: "useCloudSync")
+    let modelConfiguration = ModelConfiguration(
+      schema: schema,
+      isStoredInMemoryOnly: false,
+      cloudKitDatabase: useCloudSync ? .automatic : .none
+    )
+    print("🔧 modelConfiguration.cloudKitDatabase: \(modelConfiguration.cloudKitDatabase)")
 
     do {
       self.modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])

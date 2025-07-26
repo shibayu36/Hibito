@@ -31,7 +31,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */ = {
+		94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -44,7 +44,7 @@
 		94BD4B432DF8FBDD00FAACA9 /* Hibito */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */,
+				94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
 			);
 			path = Hibito;
 			sourceTree = "<group>";
@@ -312,7 +312,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -353,7 +353,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

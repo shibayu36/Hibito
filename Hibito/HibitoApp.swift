@@ -10,6 +10,12 @@ import SwiftUI
 
 @main
 struct HibitoApp: App {
+  init() {
+    let timestamp = DateFormatter.localizedString(
+      from: Date(), dateStyle: .none, timeStyle: .medium)
+    print("🚀 [\(timestamp)] HibitoApp launched! [PID:\(ProcessInfo.processInfo.processIdentifier)]")
+  }
+
   var body: some Scene {
     WindowGroup {
       TodoListView()
