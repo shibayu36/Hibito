@@ -37,21 +37,22 @@ class SettingsRepository {
 
   private func getSettings() -> Settings {
     let descriptor = FetchDescriptor<Settings>()
-    let settings = try? modelContext.fetch(descriptor).first
+    let allSettings = (try? modelContext.fetch(descriptor)) ?? []
 
-    let settingsList = try? modelContext.fetch(descriptor)
-    print("🔧 settingsList.count: \(settingsList?.count ?? 0)")
-    for settings in settingsList ?? [] {
-      print("🔧 settings: \(settings)")
+    print("🔧 allSettings.count: \(allSettings.count)")
+
+    if let first = allSettings.first {
+      // 2件以上ある場合は重複を削除
+      if allSettings.count > 1 {
+        allSettings.dropFirst().forEach { modelContext.delete($0) }
+        try? modelContext.save()
+      }
+      return first
     }
 
-    if let existingSettings = settings {
-      return existingSettings
-    } else {
-      let newSettings = Settings(resetTime: 0)
-      modelContext.insert(newSettings)
-      try? modelContext.save()
-      return newSettings
-    }
+    let newSettings = Settings(resetTime: 0)
+    modelContext.insert(newSettings)
+    try? modelContext.save()
+    return newSettings
   }
 }
