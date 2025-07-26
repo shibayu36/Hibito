@@ -24,9 +24,18 @@ class SettingsRepository {
 
   private func getSettings() -> Settings {
     let descriptor = FetchDescriptor<Settings>()
-    let settings = try? modelContext.fetch(descriptor).first
+    let allSettings = try? modelContext.fetch(descriptor)
 
-    if let existingSettings = settings {
+    // 複数のSettingsが存在する場合は最初の1つ以外を削除
+    // iCloud syncを利用していたとき、複数のSettingsが存在することがある
+    if let settings = allSettings, settings.count > 1 {
+      for i in 1..<settings.count {
+        modelContext.delete(settings[i])
+      }
+      try? modelContext.save()
+    }
+
+    if let existingSettings = allSettings?.first {
       return existingSettings
     } else {
       let newSettings = Settings(resetTime: 0)
