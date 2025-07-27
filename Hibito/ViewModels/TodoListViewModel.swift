@@ -39,7 +39,7 @@ class TodoListViewModel {
     let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmedContent.isEmpty else { return }
 
-    let newOrder = Date().timeIntervalSince1970
+    let newOrder = TodoItem.generateNewOrder()
     let newTodo = TodoItem(content: trimmedContent, order: newOrder)
     modelContext.insert(newTodo)
 

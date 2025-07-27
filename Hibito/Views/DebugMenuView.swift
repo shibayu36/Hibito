@@ -99,7 +99,7 @@
 
     private func createYesterdayTask() {
       let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-      let newOrder = Date().timeIntervalSince1970
+      let newOrder = TodoItem.generateNewOrder()
       let item = TodoItem(content: "昨日のタスク", order: newOrder)
       item.createdAt = yesterday
       modelContext.insert(item)
