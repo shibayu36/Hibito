@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 import Testing
 
@@ -26,6 +27,31 @@ struct SettingsViewModelTests {
     viewModel.resetTime = 9
     #expect(viewModel.resetTime == 9)
     #expect(repository.getResetTime() == 9)
+  }
+
+  @Test("useCloudSyncプロパティのバインディングとUserDefaults永続化確認")
+  func testUseCloudSync() throws {
+    let container = createInMemoryContainer()
+    let context = ModelContext(container)
+    let userDefaults = UserDefaults(suiteName: "testUseCloudSync")!
+    userDefaults.removePersistentDomain(forName: "testUseCloudSync")
+
+    let repository = SettingsRepository(modelContext: context, userDefaults: userDefaults)
+    let viewModel = SettingsViewModel(settingsRepository: repository)
+
+    // デフォルト値確認
+    #expect(viewModel.useCloudSync == false)
+    #expect(repository.getUseCloudSync() == false)
+
+    // 設定値の更新（true）
+    viewModel.useCloudSync = true
+    #expect(viewModel.useCloudSync == true)
+    #expect(repository.getUseCloudSync() == true)
+
+    // 再度更新（false）
+    viewModel.useCloudSync = false
+    #expect(viewModel.useCloudSync == false)
+    #expect(repository.getUseCloudSync() == false)
   }
 
   private func createInMemoryContainer() -> ModelContainer {
