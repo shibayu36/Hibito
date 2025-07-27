@@ -76,19 +76,20 @@
    - [x] SettingsRepositoryのUserDefaults注入対応（テスタビリティ向上）
    - [x] UserDefaults注入テスト追加（SettingsRepositoryTests）
 
-### Phase 4: UI実装とテスト
+### Phase 4: UI実装とテスト ✅ 完了
 **目的**: ユーザーがiCloud同期をON/OFF切り替えできるUI
 
 4. **SettingsView更新**
-   - [ ] iCloud同期ON/OFFスイッチ追加
-   - [ ] 説明テキスト追加（「複数デバイス間でTODOを同期します」）
-   - [ ] 再起動案内表示
+   - [x] iCloud同期ON/OFFスイッチ追加
+   - [x] 説明テキスト追加（「TODOと設定を複数デバイス間で同期します」）
+   - [x] 再起動案内表示（設定変更時のみ表示するよう改善）
 
 5. **SettingsViewModel更新**
-   - [ ] useCloudSyncプロパティ追加
-   - [ ] 同期設定変更時の処理追加
-   - [ ] 同期ON/OFF切り替えテスト追加（SettingsViewModelTests）
-   - [ ] ビルドテスト実行
+   - [x] useCloudSyncプロパティ追加
+   - [x] 同期設定変更時の処理追加（didSetパターン）
+   - [x] hasCloudSyncSettingChangedプロパティ追加（変更検知機能）
+   - [x] 同期ON/OFF切り替えテスト追加（SettingsViewModelTests）
+   - [x] ビルドテスト実行
 
 ### Phase 5: CloudKit同期通知対応
 **目的**: 他デバイスからの同期データをリアルタイムでUI反映
@@ -178,8 +179,8 @@ func updateUseCloudSync(_ enabled: Bool) {
 ## UX設計
 
 ### 設定画面UI
-- **明確な説明**：「複数デバイス間でTODOを同期します」
-- **再起動案内**：設定変更時に「変更を反映するにはアプリを再起動してください」表示
+- **明確な説明**：「TODOと設定を複数デバイス間で同期します」（リセット時間も同期されることを明示）
+- **再起動案内**：設定変更時のみ「変更を反映するにはアプリを再起動してください」表示（常時表示はしない）
 - **シンプル**：ON/OFFだけの直感的操作
 - **余計な表示なし**：同期状況や通知は一切表示しない
 
@@ -212,6 +213,27 @@ func updateUseCloudSync(_ enabled: Bool) {
 - SettingsRepositoryにUserDefaults注入機能を追加
 - iCloud同期設定の取得・更新メソッドを実装
 - テスト用のUserDefaultsインスタンスを使った完全なテストカバレッジを実現
+
+## Phase 4実装で得られた知見
+
+### UX改善の重要性
+1. **UIメッセージの正確性**: 「複数デバイス間でTODOを同期します」→「TODOと設定を複数デバイス間で同期します」に変更（リセット時間も同期されることを明示）
+2. **適切なタイミングでの案内表示**: 常に再起動案内を表示するのではなく、設定が実際に変更された時のみ表示するよう改善
+3. **変更検知の実装**: `hasCloudSyncSettingChanged`プロパティで初期値と現在値を比較して変更を検知
+
+### 実装パターンの一貫性
+1. **didSetパターンの活用**: 既存の`resetTime`と同じ`didSet`パターンを使用して、ViewModelとRepositoryの同期を実現
+2. **SwiftUIの@Observableパターン**: Stored Propertyを使うことでリアルタイムUI更新を正しく動作させる
+
+### テスト設計の改善
+1. **テスト名の明確化**: 「何をテストしているか」を端的に表現する形に変更（例：「useCloudSyncの設定が変わったときだけ、hasCloudSyncSettingChangedがtrueになる」）
+2. **過剰なテストケースの削除**: 本質的でないテストケース（「再度変更」など）を削除してシンプルに保つ
+3. **UserDefaultsテストの安定化**: `removePersistentDomain`を先に実行してクリーンな状態を確保
+
+### 実装詳細
+- SettingsViewModelに変更検知機能を追加（`initialUseCloudSync`、`hasCloudSyncSettingChanged`）
+- SettingsViewで条件付き再起動案内表示を実装
+- テストカバレッジを向上（初期値false/trueの両方のケースを含む包括的なテスト）
 
 ## 実装完了後の確認項目
 
