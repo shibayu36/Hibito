@@ -35,8 +35,8 @@ class TodoListViewModel {
     let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmedContent.isEmpty else { return }
 
-    let maxOrder = todos.last?.order ?? 0.0
-    let newTodo = TodoItem(content: trimmedContent, order: maxOrder + 1.0)
+    let newOrder = Date().timeIntervalSince1970
+    let newTodo = TodoItem(content: trimmedContent, order: newOrder)
     modelContext.insert(newTodo)
 
     loadTodos()
