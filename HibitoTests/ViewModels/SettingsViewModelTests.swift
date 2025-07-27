@@ -54,6 +54,32 @@ struct SettingsViewModelTests {
     #expect(repository.getUseCloudSync() == false)
   }
 
+  @Test("useCloudSyncの設定が変わったときだけ、設定変更を正しく検知する")
+  func testCloudSyncSettingChangeDetection() throws {
+    let container = createInMemoryContainer()
+    let context = ModelContext(container)
+    let userDefaults = UserDefaults(suiteName: "testCloudSyncSettingChangeInitialTrue")!
+    userDefaults.removePersistentDomain(forName: "testCloudSyncSettingChangeInitialTrue")
+
+    // 初期値をtrueに設定
+    userDefaults.set(true, forKey: "useCloudSync")
+
+    let repository = SettingsRepository(modelContext: context, userDefaults: userDefaults)
+    let viewModel = SettingsViewModel(settingsRepository: repository)
+
+    // 初期状態では変更なし
+    #expect(viewModel.useCloudSync == true)
+    #expect(viewModel.hasCloudSyncSettingChanged == false)
+
+    // 設定を変更（false）
+    viewModel.useCloudSync = false
+    #expect(viewModel.hasCloudSyncSettingChanged == true)
+
+    // 元に戻す
+    viewModel.useCloudSync = true
+    #expect(viewModel.hasCloudSyncSettingChanged == false)
+  }
+
   private func createInMemoryContainer() -> ModelContainer {
     let schema = Schema([Settings.self, TodoItem.self])
     let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)

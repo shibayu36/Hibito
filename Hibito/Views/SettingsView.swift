@@ -29,7 +29,7 @@ struct SettingsView: View {
         } footer: {
           VStack(alignment: .leading, spacing: 8) {
             Text("TODOと設定を複数デバイス間で同期します")
-            if viewModel.useCloudSync {
+            if viewModel.hasCloudSyncSettingChanged {
               Text("変更を反映するにはアプリを再起動してください")
                 .foregroundColor(.orange)
                 .font(.caption)
