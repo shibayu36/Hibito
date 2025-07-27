@@ -62,7 +62,7 @@
 
                   Spacer()
 
-                  Text("order: \(String(format: "%.1f", todo.order))")
+                  Text("order: \(String(format: "%.3f", todo.order))")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 }
@@ -99,8 +99,8 @@
 
     private func createYesterdayTask() {
       let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-      let maxOrder = viewModel.todos.last?.order ?? 0.0
-      let item = TodoItem(content: "昨日のタスク", order: maxOrder + 1.0)
+      let newOrder = TodoItem.generateNewOrder()
+      let item = TodoItem(content: "昨日のタスク", order: newOrder)
       item.createdAt = yesterday
       modelContext.insert(item)
       viewModel.loadTodos()

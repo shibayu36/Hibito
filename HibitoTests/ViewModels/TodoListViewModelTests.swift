@@ -38,14 +38,15 @@ struct TodoListViewModelTests {
     viewModel.addTodo(content: "タスク1")
     #expect(viewModel.todos.count == 1)
     #expect(viewModel.todos[0].content == "タスク1")
-    #expect(viewModel.todos[0].order == 1.0)
+    #expect(viewModel.todos[0].order > 0.0)  // timeIntervalSince1970ベースで正の値
     #expect(viewModel.todos[0].isCompleted == false)
 
     // 2つ目のTodo追加
+    let firstOrder = viewModel.todos[0].order
     viewModel.addTodo(content: "タスク2")
     #expect(viewModel.todos.count == 2)
     #expect(viewModel.todos[1].content == "タスク2")
-    #expect(viewModel.todos[1].order == 2.0)
+    #expect(viewModel.todos[1].order > firstOrder)  // 2つ目の方が大きい値
     #expect(viewModel.todos[1].isCompleted == false)
 
     // 2つ目のTodoを完了状態に変更

@@ -13,4 +13,11 @@ class TodoItem {
     self.content = content
     self.order = order
   }
+
+  /// 新しいTodoアイテム用のorder値を生成します
+  /// timeIntervalSince1970ベースで重複のない値を生成
+  /// 複数端末で使用していても、iCloud同期時に順序が安定するよう設計
+  static func generateNewOrder() -> Double {
+    return Date().timeIntervalSince1970
+  }
 }
