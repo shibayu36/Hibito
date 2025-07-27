@@ -59,22 +59,22 @@
    - [x] Xcode Capabilities追加（CloudKit）
    - [x] Entitlements更新（CloudKit権限追加、iCloud.org.shibayu36.dailydo設定）
 
-### Phase 2: ModelContainer設定
+### Phase 2: ModelContainer設定 ✅ 完了
 **目的**: SwiftDataとCloudKitの連携設定
 
 2. **ModelContainerManager修正**
-   - [ ] UserDefaultsから同期設定を読み取る機能追加
-   - [ ] cloudKitDatabase設定を動的に切り替える機能追加（.automatic / .none）
-   - [ ] ビルドテスト実行
+   - [x] UserDefaultsから同期設定を読み取る機能追加
+   - [x] cloudKitDatabase設定を動的に切り替える機能追加（.automatic / .none）
+   - [x] ビルドテスト実行
 
-### Phase 3: SettingsRepository拡張
+### Phase 3: SettingsRepository拡張 ✅ 完了
 **目的**: iCloud同期設定の管理機能追加
 
 3. **同期設定管理**
-   - [ ] getCloudSyncEnabled()メソッド追加
-   - [ ] updateCloudSyncEnabled()メソッド追加
-   - [ ] SettingsRepositoryのUserDefaults注入対応（テスタビリティ向上）
-   - [ ] UserDefaults注入テスト追加（SettingsRepositoryTests）
+   - [x] getUseCloudSync()メソッド追加（キー名と一貫性のあるメソッド名に）
+   - [x] updateUseCloudSync()メソッド追加
+   - [x] SettingsRepositoryのUserDefaults注入対応（テスタビリティ向上）
+   - [x] UserDefaults注入テスト追加（SettingsRepositoryTests）
 
 ### Phase 4: UI実装とテスト
 **目的**: ユーザーがiCloud同期をON/OFF切り替えできるUI
@@ -156,15 +156,22 @@ private init() {
 }
 ```
 
-### SettingsRepository拡張（実装例）
+### SettingsRepository拡張（実装済み）
 ```swift
-// UserDefaults管理（端末固有）- 追加予定のメソッド
-func getCloudSyncEnabled() -> Bool {
-    return UserDefaults.standard.bool(forKey: "useCloudSync")
+// UserDefaults管理（端末固有）
+private let userDefaults: UserDefaults
+
+init(modelContext: ModelContext, userDefaults: UserDefaults = .standard) {
+    self.modelContext = modelContext
+    self.userDefaults = userDefaults
 }
 
-func updateCloudSyncEnabled(_ enabled: Bool) {
-    UserDefaults.standard.set(enabled, forKey: "useCloudSync")
+func getUseCloudSync() -> Bool {
+    return userDefaults.bool(forKey: "useCloudSync")
+}
+
+func updateUseCloudSync(_ enabled: Bool) {
+    userDefaults.set(enabled, forKey: "useCloudSync")
 }
 ```
 
@@ -193,6 +200,18 @@ func updateCloudSyncEnabled(_ enabled: Bool) {
   - 設定値の永続化テスト
 - **オフラインテスト不要**：CloudKitが自動処理するため
 - **動的切り替えテスト不要**：再起動ベースのシンプルな仕組み
+
+## Phase 3実装で得られた知見
+
+### 実装上の改善点
+1. **メソッド名の一貫性**: 当初`getCloudSyncEnabled`としていたが、UserDefaultsのキー名`useCloudSync`に合わせて`getUseCloudSync`に統一
+2. **テスト設計の最適化**: デフォルト値テストを別にするより、1つのテストで初期値→true→falseの流れで包括的に確認
+3. **UserDefaults注入パターン**: デフォルト引数を使うことで既存コードへの影響を最小限に抑えつつテスタビリティを向上
+
+### 実装詳細
+- SettingsRepositoryにUserDefaults注入機能を追加
+- iCloud同期設定の取得・更新メソッドを実装
+- テスト用のUserDefaultsインスタンスを使った完全なテストカバレッジを実現
 
 ## 実装完了後の確認項目
 
