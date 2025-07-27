@@ -71,7 +71,8 @@
 
 **PoCで発見した追加実装**:
 - TodoListViewModelにNSPersistentCloudKitContainer.eventChangedNotification監視を追加
-- 各種操作（追加、削除、移動等）で明示的なsave()呼び出しを追加
+- SwiftDataの全操作に明示的なsave()呼び出しを追加（[PR #34](https://github.com/shibayu36/Hibito/pull/34)で実装済み）
+  - TodoListViewModelの4つのメソッド（addTodo、toggleCompletion、deleteTodo、moveTodo）にsave()追加
 - Settings重複排除ロジックを実装（複数件存在時に1件に統合）
 
 ### Phase 2: 本実装への移行
