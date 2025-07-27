@@ -24,7 +24,11 @@ class TodoListViewModel {
   /// SwiftDataからTodoアイテムを読み込んでtodos配列を更新します
   /// order値でソートされた状態で取得されます
   func loadTodos() {
-    let descriptor = FetchDescriptor<TodoItem>(sortBy: [SortDescriptor(\.order)])
+    let descriptor = FetchDescriptor<TodoItem>(sortBy: [
+      SortDescriptor(\.order),
+      // 最悪orderが一致した時に安定させる
+      SortDescriptor(\.id),
+    ])
     todos = (try? modelContext.fetch(descriptor)) ?? []
   }
 
