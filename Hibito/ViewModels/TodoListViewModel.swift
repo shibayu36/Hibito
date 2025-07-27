@@ -42,6 +42,7 @@ class TodoListViewModel {
     let newOrder = TodoItem.generateNewOrder()
     let newTodo = TodoItem(content: trimmedContent, order: newOrder)
     modelContext.insert(newTodo)
+    try? modelContext.save()
 
     loadTodos()
   }
@@ -50,6 +51,7 @@ class TodoListViewModel {
   /// - Parameter todo: 完了状態を切り替えるTodoアイテム
   func toggleCompletion(for todo: TodoItem) {
     todo.isCompleted.toggle()
+    try? modelContext.save()
     loadTodos()
   }
 
@@ -59,6 +61,7 @@ class TodoListViewModel {
   func deleteTodo(at index: Int) {
     guard index >= 0 && index < todos.count else { return }
     modelContext.delete(todos[index])
+    try? modelContext.save()
     loadTodos()
   }
 
@@ -78,6 +81,7 @@ class TodoListViewModel {
     )
 
     movingItem.order = newOrder
+    try? modelContext.save()
     loadTodos()
   }
 
