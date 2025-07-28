@@ -100,10 +100,29 @@
    - [x] import成功時のみloadTodos()を実行するよう最適化
    - [x] 既存テスト実行・修正（全21テスト合格）
 
-### Phase 6: 最終確認
+### Phase 6: isCompleted同期問題修正
+**目的**: 別端末でのTODO完了状態変更がUIに反映されない問題の修正
+
+6. **問題調査と修正**
+   - [ ] 別端末でのisCompleted変更時の同期動作調査
+   - [ ] TodoListViewModelの同期処理確認（loadTodos()の実行タイミング）
+   - [ ] UI反映されない原因の特定（ObservableObjectの更新問題？）
+   - [ ] デバッグメニューとの動作差異分析（なぜデバッグメニューでは反映されるか）
+   - [ ] 修正実装とテスト
+
+### Phase 7: CloudKit警告対応
+**目的**: CoreData+CloudKit警告の解消
+
+7. **警告対応**
+   - [ ] CoreData+CloudKit警告の詳細調査（"store was removed from the coordinator"）
+   - [ ] ModelContainer設定の見直し
+   - [ ] 警告を解消する実装修正
+   - [ ] 動作への影響確認
+
+### Phase 8: 最終確認
 **目的**: リリース準備
 
-7. **総合確認**
+8. **総合確認**
    - [ ] iOS Simulator向けビルドエラー確認
    - [ ] 既存機能の動作維持確認
    - [ ] デバイス間同期テスト（1分以内反映）
