@@ -91,13 +91,14 @@
    - [x] 同期ON/OFF切り替えテスト追加（SettingsViewModelTests）
    - [x] ビルドテスト実行
 
-### Phase 5: CloudKit同期通知対応
+### Phase 5: CloudKit同期通知対応 ✅ 完了
 **目的**: 他デバイスからの同期データをリアルタイムでUI反映
 
 6. **同期完了通知**
-   - [ ] TodoListViewModelにNSPersistentCloudKitContainer.eventChangedNotification監視追加
-   - [ ] 同期完了時のUI更新処理追加
-   - [ ] 既存テスト実行・修正
+   - [x] TodoListViewModelにNSPersistentCloudKitContainer.eventChangedNotification監視追加
+   - [x] 同期完了時のUI更新処理追加（Combineベースの実装）
+   - [x] import成功時のみloadTodos()を実行するよう最適化
+   - [x] 既存テスト実行・修正（全21テスト合格）
 
 ### Phase 6: 最終確認
 **目的**: リリース準備
@@ -234,6 +235,34 @@ func updateUseCloudSync(_ enabled: Bool) {
 - SettingsViewModelに変更検知機能を追加（`initialUseCloudSync`、`hasCloudSyncSettingChanged`）
 - SettingsViewで条件付き再起動案内表示を実装
 - テストカバレッジを向上（初期値false/trueの両方のケースを含む包括的なテスト）
+
+## Phase 5実装で得られた知見
+
+### CloudKit通知処理の実装
+1. **Combineアプローチの採用**: NotificationCenter.defaultの`publisher(for:)`を使用してSwiftらしい実装を実現
+2. **自動メモリ管理**: AnyCancellableを使用することでdeinitでの手動クリーンアップが不要に
+3. **効率的なフィルタリング**: import成功時のみUI更新することでパフォーマンスを最適化
+
+### 技術的な選択
+1. **通知フィルタリングの重要性**: 
+   - import + succeeded: 他デバイスからのデータ取り込み時のみUI更新
+   - export時は処理しない: 自デバイスからの送信は既にローカル反映済み
+2. **@MainActorとの整合性**: Combineの`receive(on: DispatchQueue.main)`でメインスレッド実行を保証
+
+### テスト実装の課題と学び
+1. **NSPersistentCloudKitContainer.Eventのモック困難性**: 
+   - 実際のEventオブジェクトを作成できないことが判明
+   - テスト用の#if DEBUGコードは本番コードを汚染するため不適切
+2. **代替アプローチの検討**:
+   - 通知処理を別クラスに切り出す
+   - loadTodos()の呼び出し回数をカウント
+   - 統合テストレベルでの動作確認に留める
+
+### 実装詳細
+- setupCloudKitNotificationObserver()メソッドでCloudKit通知を監視
+- compactMapとfilterでimport成功イベントのみを処理
+- weak selfでメモリリークを防止
+- 既存の21テストすべて合格を確認
 
 ## 実装完了後の確認項目
 
