@@ -86,7 +86,7 @@ struct TodoListView: View {
             }
           }
           .listStyle(PlainListStyle())
-          .id(viewModel.syncDate)
+          .id(viewModel.iCloudImportDate)  // iCloud import時にTodoRowViewの再レンダリングが行われないので、Listごと再レンダリングする
         }
       }
       .frame(maxWidth: .infinity)

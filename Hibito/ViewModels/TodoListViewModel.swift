@@ -17,10 +17,13 @@ class TodoListViewModel {
   private let settingsRepository: SettingsRepository
   private(set) var todos: [TodoItem] = []
   private var cancellables: Set<AnyCancellable> = []
+  // iCloudでデータをimportした時刻を保持する。Listの更新をトリガーにするために使用する。
+  private(set) var iCloudImportDate: Date
 
   init(modelContext: ModelContext, settingsRepository: SettingsRepository) {
     self.modelContext = modelContext
     self.settingsRepository = settingsRepository
+    self.iCloudImportDate = Date()
     loadTodos()
     setupCloudKitNotificationObserver()
   }
@@ -39,6 +42,7 @@ class TodoListViewModel {
       .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
         self?.loadTodos()
+        self?.iCloudImportDate = Date()
       }
       .store(in: &cancellables)
   }
