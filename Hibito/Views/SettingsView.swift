@@ -15,7 +15,9 @@ struct SettingsView: View {
               Text("\(hour):00").tag(hour)
             }
           }
-          .pickerStyle(.wheel)
+          #if os(iOS)
+            .pickerStyle(.wheel)
+          #endif
         } header: {
           Text("リセット時間")
         } footer: {
@@ -38,13 +40,23 @@ struct SettingsView: View {
         }
       }
       .navigationTitle("設定")
-      .navigationBarTitleDisplayMode(.inline)
+      #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+      #endif
       .toolbar {
-        ToolbarItem(placement: .navigationBarTrailing) {
-          Button("完了") {
-            dismiss()
+        #if os(iOS)
+          ToolbarItem(placement: .navigationBarTrailing) {
+            Button("完了") {
+              dismiss()
+            }
           }
-        }
+        #else
+          ToolbarItem(placement: .confirmationAction) {
+            Button("完了") {
+              dismiss()
+            }
+          }
+        #endif
       }
     }
   }
