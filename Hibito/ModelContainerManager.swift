@@ -15,7 +15,15 @@ class ModelContainerManager {
 
   private init() {
     let schema = Schema([TodoItem.self, Settings.self])
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+
+    // UserDefaultsから同期設定を取得
+    let useCloudSync = UserDefaults.standard.bool(forKey: "useCloudSync")
+
+    let modelConfiguration = ModelConfiguration(
+      schema: schema,
+      isStoredInMemoryOnly: false,
+      cloudKitDatabase: useCloudSync ? .automatic : .none
+    )
 
     do {
       self.modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])

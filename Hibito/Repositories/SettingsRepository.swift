@@ -5,9 +5,11 @@ import SwiftData
 @MainActor
 class SettingsRepository {
   private let modelContext: ModelContext
+  private let userDefaults: UserDefaults
 
-  init(modelContext: ModelContext) {
+  init(modelContext: ModelContext, userDefaults: UserDefaults = .standard) {
     self.modelContext = modelContext
+    self.userDefaults = userDefaults
   }
 
   /// 現在のリセット時間を取得
@@ -20,6 +22,16 @@ class SettingsRepository {
     let settings = getSettings()
     settings.resetTime = resetTime
     try? modelContext.save()
+  }
+
+  /// iCloud同期設定を取得
+  func getUseCloudSync() -> Bool {
+    return userDefaults.bool(forKey: "useCloudSync")
+  }
+
+  /// iCloud同期設定を更新
+  func updateUseCloudSync(_ enabled: Bool) {
+    userDefaults.set(enabled, forKey: "useCloudSync")
   }
 
   private func getSettings() -> Settings {

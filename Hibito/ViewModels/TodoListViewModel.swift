@@ -5,6 +5,8 @@
 //  Created by Yuki Shibazaki on 2025/06/22.
 //
 
+import Combine
+import CoreData
 import Foundation
 import SwiftData
 
@@ -14,11 +16,35 @@ class TodoListViewModel {
   private let modelContext: ModelContext
   private let settingsRepository: SettingsRepository
   private(set) var todos: [TodoItem] = []
+  private var cancellables: Set<AnyCancellable> = []
+  // iCloudでデータをimportした時刻を保持する。Listの更新をトリガーにするために使用する。
+  private(set) var iCloudImportDate: Date
 
   init(modelContext: ModelContext, settingsRepository: SettingsRepository) {
     self.modelContext = modelContext
     self.settingsRepository = settingsRepository
+    self.iCloudImportDate = Date()
     loadTodos()
+    setupCloudKitNotificationObserver()
+  }
+
+  /// CloudKitでデータをimportした時に、todos配列を更新する
+  private func setupCloudKitNotificationObserver() {
+    NotificationCenter.default
+      .publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
+      .compactMap { notification -> NSPersistentCloudKitContainer.Event? in
+        notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
+          as? NSPersistentCloudKitContainer.Event
+      }
+      .filter { event in
+        event.type == .import && event.succeeded
+      }
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] _ in
+        self?.loadTodos()
+        self?.iCloudImportDate = Date()
+      }
+      .store(in: &cancellables)
   }
 
   /// SwiftDataからTodoアイテムを読み込んでtodos配列を更新します

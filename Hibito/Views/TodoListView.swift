@@ -86,6 +86,7 @@ struct TodoListView: View {
             }
           }
           .listStyle(PlainListStyle())
+          .id(viewModel.iCloudImportDate)  // iCloud import時にTodoRowViewの再レンダリングが行われないので、Listごと再レンダリングする
         }
       }
       .frame(maxWidth: .infinity)
@@ -206,8 +207,8 @@ struct TodoListView: View {
 }
 
 struct TodoRowView: View {
-  let item: TodoItem
-  let viewModel: TodoListViewModel
+  @Bindable var item: TodoItem
+  @Bindable var viewModel: TodoListViewModel
 
   var body: some View {
     HStack {

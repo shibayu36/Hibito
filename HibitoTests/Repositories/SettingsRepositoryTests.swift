@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 import Testing
 
@@ -49,6 +50,23 @@ struct SettingsRepositoryTests {
     let descriptor = FetchDescriptor<Settings>()
     let allSettings = try context.fetch(descriptor)
     #expect(allSettings.count == 1)
+  }
+
+  @Test("iCloud同期設定の更新と取得")
+  func updateAndGetUseCloudSync() throws {
+    let container = createInMemoryContainer()
+    let context = ModelContext(container)
+    let testUserDefaults = UserDefaults(suiteName: "test.settings.repository")!
+    testUserDefaults.removePersistentDomain(forName: "test.settings.repository")
+    let repository = SettingsRepository(modelContext: context, userDefaults: testUserDefaults)
+
+    #expect(repository.getUseCloudSync() == false)
+
+    repository.updateUseCloudSync(true)
+    #expect(repository.getUseCloudSync() == true)
+
+    repository.updateUseCloudSync(false)
+    #expect(repository.getUseCloudSync() == false)
   }
 
   private func createInMemoryContainer() -> ModelContainer {
