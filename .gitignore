@@ -63,6 +63,7 @@ fastlane/test_output
 
 
 .claude/settings.local.json
+.claude/tmp/
 
 # SweetPad
 /buildServer.json

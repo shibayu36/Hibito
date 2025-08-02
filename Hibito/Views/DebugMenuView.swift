@@ -52,24 +52,26 @@
 
         ScrollView {
           LazyVStack(alignment: .leading, spacing: 8) {
-            ForEach(Array(viewModel.todos.enumerated()), id: \.element.id) { index, todo in
+            ForEach(viewModel.todos) { todo in
+
               VStack(alignment: .leading, spacing: 2) {
                 HStack {
-                  Text("[\(index + 1)] \(todo.isCompleted ? "✓" : "×")")
+                  Text("\(todo.isCompleted ? "✓" : "×")")
                     .font(.caption2)
                     .fontWeight(.medium)
                     .foregroundColor(todo.isCompleted ? .green : .red)
 
                   Spacer()
 
-                  Text("order: \(String(format: "%.3f", todo.order))")
+                  Text("order: \(todo.order, specifier: "%.3f")")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 }
 
-                Text(todo.content.prefix(50) + (todo.content.count > 50 ? "..." : ""))
+                Text(todo.content)
                   .font(.caption2)
                   .lineLimit(2)
+                  .truncationMode(.tail)
                   .foregroundColor(.primary)
 
                 Text(dateFormatter.string(from: todo.createdAt))
@@ -77,7 +79,7 @@
                   .foregroundColor(.secondary)
               }
               .padding(8)
-              .background(Color(UIColor.systemGray6))
+              .background(Color.gray.opacity(0.1))
               .cornerRadius(6)
             }
           }
@@ -85,7 +87,7 @@
         .frame(maxHeight: 200)
       }
       .padding(8)
-      .background(Color(UIColor.systemGray5))
+      .background(Color.gray.opacity(0.2))
       .cornerRadius(8)
     }
 
