@@ -25,7 +25,7 @@
 
 /* Begin PBXFileReference section */
 		9456AD442E1AB32F006B1DBB /* Hibito.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Hibito.xctestplan; sourceTree = "<group>"; };
-		94BD4B412DF8FBDD00FAACA9 /* Hibito.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hibito.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		94BD4B412DF8FBDD00FAACA9 /* Daily Do Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Daily Do Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94BD4B522DF8FBDE00FAACA9 /* HibitoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HibitoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94BD4B5C2DF8FBDE00FAACA9 /* HibitoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HibitoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -100,7 +100,7 @@
 		94BD4B422DF8FBDD00FAACA9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				94BD4B412DF8FBDD00FAACA9 /* Hibito.app */,
+				94BD4B412DF8FBDD00FAACA9 /* Daily Do Dev.app */,
 				94BD4B522DF8FBDE00FAACA9 /* HibitoTests.xctest */,
 				94BD4B5C2DF8FBDE00FAACA9 /* HibitoUITests.xctest */,
 			);
@@ -129,7 +129,7 @@
 			packageProductDependencies = (
 			);
 			productName = Hibito;
-			productReference = 94BD4B412DF8FBDD00FAACA9 /* Hibito.app */;
+			productReference = 94BD4B412DF8FBDD00FAACA9 /* Daily Do Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
 		94BD4B512DF8FBDE00FAACA9 /* HibitoTests */ = {
@@ -314,7 +314,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Daily Do Dev";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -357,7 +357,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Daily Do";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
