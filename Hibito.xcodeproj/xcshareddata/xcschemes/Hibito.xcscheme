@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "94BD4B402DF8FBDD00FAACA9"
-               BuildableName = "Hibito.app"
+               BuildableName = "Daily Do.app"
                BlueprintName = "Hibito"
                ReferencedContainer = "container:Hibito.xcodeproj">
             </BuildableReference>
@@ -30,12 +30,10 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            default = "YES"
-            reference = "container:Hibito.xctestplan">
+            reference = "container:Hibito.xctestplan"
+            default = "YES">
          </TestPlanReference>
       </TestPlans>
-      <Testables>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -52,7 +50,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "94BD4B402DF8FBDD00FAACA9"
-            BuildableName = "Hibito.app"
+            BuildableName = "Daily Do.app"
             BlueprintName = "Hibito"
             ReferencedContainer = "container:Hibito.xcodeproj">
          </BuildableReference>
@@ -69,7 +67,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "94BD4B402DF8FBDD00FAACA9"
-            BuildableName = "Hibito.app"
+            BuildableName = "Daily Do.app"
             BlueprintName = "Hibito"
             ReferencedContainer = "container:Hibito.xcodeproj">
          </BuildableReference>
