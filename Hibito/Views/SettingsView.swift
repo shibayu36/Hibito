@@ -79,15 +79,11 @@ struct SettingsView: View {
             .font(.title2)
             .fontWeight(.semibold)
           Spacer()
-          Button("完了") {
-            dismiss()
-          }
-          .buttonStyle(.borderedProminent)
         }
         .padding()
 
         Form {
-          Section("リセット時間") {
+          VStack(alignment: .leading, spacing: 4) {
             HStack {
               Text("リセット時間")
               Spacer()
@@ -103,16 +99,18 @@ struct SettingsView: View {
               .foregroundColor(.secondary)
           }
 
-          Section("データ同期") {
-            Toggle("iCloud同期", isOn: $viewModel.useCloudSync)
+          VStack(alignment: .leading, spacing: 4) {
+            HStack {
+              Toggle("iCloud同期", isOn: $viewModel.useCloudSync)
+            }
             VStack(alignment: .leading, spacing: 4) {
               Text("TODOと設定を複数デバイス間で同期します")
                 .font(.caption)
                 .foregroundColor(.secondary)
               if viewModel.hasCloudSyncSettingChanged {
                 Text("変更を反映するにはアプリを再起動してください")
-                  .foregroundColor(.orange)
                   .font(.caption)
+                  .foregroundColor(.orange)
               }
             }
           }
@@ -120,6 +118,15 @@ struct SettingsView: View {
         .formStyle(.grouped)
 
         Spacer()
+
+        HStack {
+          Spacer()
+          Button("完了") {
+            dismiss()
+          }
+          .buttonStyle(.borderedProminent)
+        }
+        .padding()
       }
       .frame(minWidth: 400, minHeight: 300)
     }
