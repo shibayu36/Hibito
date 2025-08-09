@@ -21,6 +21,7 @@ struct TodoListView: View {
   // 新規Todo入力の状態管理
   @State private var newItemText = ""
   @FocusState private var isInputFocused: Bool
+  @State private var triggerAddFeedback = false  // TODO追加時の振動フィードバックトリガー
 
   // 自動リセット機能の状態管理
   @State private var resetTimer: Timer?
@@ -135,6 +136,7 @@ struct TodoListView: View {
       }
       .safeAreaPadding(.bottom)
       .background(.regularMaterial)
+      .sensoryFeedback(.selection, trigger: triggerAddFeedback)
 
       // デバッグメニュー（条件付き表示）
       #if DEBUG
@@ -173,6 +175,7 @@ struct TodoListView: View {
   private func addItem() {
     viewModel.addTodo(content: newItemText)
     newItemText = ""
+    triggerAddFeedback.toggle()
   }
 
   // MARK: - 自動リセット機能
@@ -229,6 +232,10 @@ struct TodoRowView: View {
       Spacer()
     }
     .padding(.vertical, 4)
+    .sensoryFeedback(.success, trigger: item.isCompleted) { oldValue, newValue in
+      // 未完了→完了の時のみ成功フィードバックを発生させる
+      !oldValue && newValue
+    }
   }
 }
 
