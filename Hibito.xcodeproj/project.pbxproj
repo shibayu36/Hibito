@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		941BD9A72E515E210006F08C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 941BD9A62E515E210006F08C /* FirebaseAnalytics */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		94BD4B532DF8FBDE00FAACA9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -66,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				941BD9A72E515E210006F08C /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +132,7 @@
 			);
 			name = Hibito;
 			packageProductDependencies = (
+				941BD9A62E515E210006F08C /* FirebaseAnalytics */,
 			);
 			productName = Hibito;
 			productReference = 94BD4B412DF8FBDD00FAACA9 /* Daily Do Dev.app */;
@@ -210,6 +216,9 @@
 			);
 			mainGroup = 94BD4B382DF8FBDD00FAACA9;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				941BD9A52E515E210006F08C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 94BD4B422DF8FBDD00FAACA9 /* Products */;
 			projectDirPath = "";
@@ -616,6 +625,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		941BD9A52E515E210006F08C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		941BD9A62E515E210006F08C /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 941BD9A52E515E210006F08C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 94BD4B392DF8FBDD00FAACA9 /* Project object */;
 }
