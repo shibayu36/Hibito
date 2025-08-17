@@ -46,6 +46,7 @@ struct SettingsView: View {
           }
         }
       }
+      .trackScreen("SettingsView")
     }
   }
 }
