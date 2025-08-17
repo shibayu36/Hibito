@@ -21,7 +21,7 @@ struct ScreenTrackModifier: ViewModifier {
 }
 
 extension View {
-  func trackScreen(_ name: String, klass: String? = nil) -> some View {
-    modifier(ScreenTrackModifier(name: name, klass: klass ?? "\(type(of: self))"))
+  func trackScreen(_ name: String, klass: String) -> some View {
+    modifier(ScreenTrackModifier(name: name, klass: klass))
   }
 }
