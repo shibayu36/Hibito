@@ -46,7 +46,7 @@ struct SettingsView: View {
           }
         }
       }
-      .trackScreen("SettingsView")
+      .trackScreen("Settings", klass: "SettingsView")
     }
   }
 }

@@ -170,7 +170,7 @@ struct TodoListView: View {
     .sheet(isPresented: $showingSettings) {
       SettingsView()
     }
-    .trackScreen("TodoListView")
+    .trackScreen("TodoList", klass: "TodoListView")
   }
 
   private func addItem() {
