@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 import Testing
 
-@testable import Hibito
+@testable import DailyDo
 
 @MainActor
 struct TodoListViewModelTests {
