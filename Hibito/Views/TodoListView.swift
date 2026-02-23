@@ -87,6 +87,7 @@ struct TodoListView: View {
             }
           }
           .listStyle(PlainListStyle())
+          .environment(\.defaultMinListRowHeight, 44)  // TODOリストは密度高く配置する
           .id(viewModel.iCloudImportDate)  // iCloud import時にTodoRowViewの再レンダリングが行われないので、Listごと再レンダリングする
         }
       }
@@ -233,6 +234,7 @@ struct TodoRowView: View {
       Spacer()
     }
     .padding(.vertical, 4)
+    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))  // TODOリストは密度高く配置する
     .sensoryFeedback(.success, trigger: item.isCompleted) { oldValue, newValue in
       // 未完了→完了の時のみ成功フィードバックを発生させる
       !oldValue && newValue
