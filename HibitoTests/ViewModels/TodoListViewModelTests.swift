@@ -91,6 +91,20 @@ struct TodoListViewModelTests {
   }
 
   @Test
+  func Todo追加時に改行文字が除去される() async throws {
+    let container = try createTestContainer()
+    let modelContext = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: modelContext)
+    let viewModel = TodoListViewModel(
+      modelContext: modelContext, settingsRepository: settingsRepository)
+
+    // 中間に改行を含むテキスト（音声入力で発生するケース）
+    viewModel.addTodo(content: "タスク1の\n続きの内容\n")
+    #expect(viewModel.todos.count == 1)
+    #expect(viewModel.todos[0].content == "タスク1の続きの内容")
+  }
+
+  @Test
   func Todoの並び替えが正しく動作する() async throws {
     let container = try createTestContainer()
     let modelContext = container.mainContext
