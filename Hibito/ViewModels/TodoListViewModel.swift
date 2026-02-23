@@ -59,7 +59,7 @@ class TodoListViewModel {
   }
 
   /// 新しいTodoアイテムを追加します
-  /// - Parameter content: 追加するTodoの内容（前後の空白は自動的に削除されます）
+  /// - Parameter content: 追加するTodoの内容（改行文字は除去され、前後の空白は自動的に削除されます）
   /// - Note: 空文字またはスペースのみの場合は追加されません
   func addTodo(content: String) {
     let sanitizedContent = content.components(separatedBy: .newlines).joined()

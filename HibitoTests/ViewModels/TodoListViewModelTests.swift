@@ -91,7 +91,7 @@ struct TodoListViewModelTests {
   }
 
   @Test
-  func Todo追加時に中間の改行がスペースに置換される() async throws {
+  func Todo追加時に改行文字が除去される() async throws {
     let container = try createTestContainer()
     let modelContext = container.mainContext
     let settingsRepository = SettingsRepository(modelContext: modelContext)
