@@ -35,7 +35,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */ = {
+		94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -48,7 +48,7 @@
 		94BD4B432DF8FBDD00FAACA9 /* Hibito */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */,
+				94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
 			);
 			path = Hibito;
 			sourceTree = "<group>";
@@ -323,6 +323,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo.dev;
+				PRODUCT_MODULE_NAME = DailyDo;
 				PRODUCT_NAME = "Daily Do Dev";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -366,6 +367,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo;
+				PRODUCT_MODULE_NAME = DailyDo;
 				PRODUCT_NAME = "Daily Do";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -513,7 +515,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hibito.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Hibito";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily Do Dev.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily Do Dev";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Debug;
@@ -536,7 +538,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hibito.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Hibito";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily Do.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily Do";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Release;
