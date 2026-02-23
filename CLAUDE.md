@@ -116,8 +116,8 @@ open Hibito.xcodeproj
 # Xcodeでのビルド: Cmd+B
 # Xcodeでの実行: Cmd+R
 
-# iPhone 16シミュレータ向けビルド（コマンドライン）
-xcodebuild -scheme Hibito -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16' build
+# iPhone 17 Proシミュレータ向けビルド（コマンドライン）
+xcodebuild -scheme Hibito -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
 ### テスト
@@ -128,14 +128,14 @@ Swift Testingフレームワーク（`@Test`マクロ）を使用しています
 mcp__XcodeBuildMCP__test_sim_name_proj({
   projectPath: "Hibito.xcodeproj",
   scheme: "Hibito",
-  simulatorName: "iPhone 16"
+  simulatorName: "iPhone 17 Pro"
 })
 
 // 特定のテストクラス全体を実行
 mcp__XcodeBuildMCP__test_sim_name_proj({
   projectPath: "Hibito.xcodeproj",
   scheme: "Hibito",
-  simulatorName: "iPhone 16",
+  simulatorName: "iPhone 17 Pro",
   extraArgs: ["-only-testing", "HibitoTests/SettingsViewModelTests"]
 })
 
@@ -143,7 +143,7 @@ mcp__XcodeBuildMCP__test_sim_name_proj({
 mcp__XcodeBuildMCP__test_sim_name_proj({
   projectPath: "Hibito.xcodeproj",
   scheme: "Hibito",
-  simulatorName: "iPhone 16",
+  simulatorName: "iPhone 17 Pro",
   extraArgs: ["-only-testing", "HibitoTests/SettingsViewModelTests/testResetTimeUpdate"]
 })
 
@@ -151,7 +151,7 @@ mcp__XcodeBuildMCP__test_sim_name_proj({
 mcp__XcodeBuildMCP__test_sim_name_proj({
   projectPath: "Hibito.xcodeproj",
   scheme: "Hibito",
-  simulatorName: "iPhone 16",
+  simulatorName: "iPhone 17 Pro",
   extraArgs: [
     "-only-testing", "HibitoTests/SettingsViewModelTests",
     "-only-testing", "HibitoTests/SettingsRepositoryTests"
@@ -162,7 +162,7 @@ mcp__XcodeBuildMCP__test_sim_name_proj({
 mcp__XcodeBuildMCP__test_sim_id_proj({
   projectPath: "Hibito.xcodeproj",
   scheme: "Hibito",
-  simulatorId: "98BDEC2F-67E8-4EE3-8024-AFF532E1E42F",
+  simulatorId: "C0E035CE-D7D2-4414-B6C0-ED8F8EB50AD3",
   extraArgs: ["-only-testing", "HibitoTests/SettingsViewModelTests"]
 })
 ```
