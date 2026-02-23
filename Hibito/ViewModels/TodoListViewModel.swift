@@ -62,7 +62,8 @@ class TodoListViewModel {
   /// - Parameter content: 追加するTodoの内容（前後の空白は自動的に削除されます）
   /// - Note: 空文字またはスペースのみの場合は追加されません
   func addTodo(content: String) {
-    let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
+    let sanitizedContent = content.components(separatedBy: .newlines).joined()
+    let trimmedContent = sanitizedContent.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmedContent.isEmpty else { return }
 
     let newOrder = TodoItem.generateNewOrder()
