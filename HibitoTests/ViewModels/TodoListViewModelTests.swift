@@ -49,19 +49,85 @@ struct TodoListViewModelTests {
     #expect(viewModel.todos[1].order > firstOrder)  // 2つ目の方が大きい値
     #expect(viewModel.todos[1].isCompleted == false)
 
-    // 2つ目のTodoを完了状態に変更
+    // 2つ目のTodoを完了状態に変更 → 完了アイテムが上部に移動
     let secondTodo = viewModel.todos[1]
     viewModel.toggleCompletion(for: secondTodo)
-    #expect(viewModel.todos[1].isCompleted == true)
-
-    // 2つ目のTodoを未完了に戻す
-    viewModel.toggleCompletion(for: secondTodo)
+    #expect(viewModel.todos[0].content == "タスク2")
+    #expect(viewModel.todos[0].isCompleted == true)
+    #expect(viewModel.todos[1].content == "タスク1")
     #expect(viewModel.todos[1].isCompleted == false)
 
-    // 1つ目のTodoを削除
+    // 2つ目のTodoを未完了に戻す → 未完了グループの先頭に配置
+    viewModel.toggleCompletion(for: secondTodo)
+    #expect(secondTodo.isCompleted == false)
+    #expect(viewModel.todos[0].content == "タスク2")
+    #expect(viewModel.todos[1].content == "タスク1")
+
+    // 先頭のTodoを削除
     viewModel.deleteTodo(at: 0)
     #expect(viewModel.todos.count == 1)
-    #expect(viewModel.todos[0].content == "タスク2")
+    #expect(viewModel.todos[0].content == "タスク1")
+  }
+
+  @Test
+  func 完了と未完了の切り替えや並び替えが正しく動作する() async throws {
+    let container = try createTestContainer()
+    let context = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(
+      modelContext: context, settingsRepository: settingsRepository)
+
+    viewModel.addTodo(content: "A")
+    viewModel.addTodo(content: "B")
+    viewModel.addTodo(content: "C")
+    viewModel.addTodo(content: "D")
+
+    let todoB = viewModel.todos[1]
+    let todoD = viewModel.todos[3]
+
+    // BをDone → 完了アイテムが上部に移動
+    viewModel.toggleCompletion(for: todoB)
+    #expect(viewModel.todos.map(\.content) == ["B", "A", "C", "D"])
+    #expect(viewModel.todos[0].isCompleted == true)
+
+    // DをDone → Done順で完了グループの末尾に追加
+    viewModel.toggleCompletion(for: todoD)
+    #expect(viewModel.todos.map(\.content) == ["B", "D", "A", "C"])
+    #expect(viewModel.todos[1].isCompleted == true)
+
+    // CをAの前に移動 → 完了アイテムがある状態で未完了アイテムを並び替え
+    viewModel.moveTodo(from: 3, to: 2)
+    #expect(viewModel.todos.map(\.content) == ["B", "D", "C", "A"])
+
+    // BのDone解除 → 未完了グループの先頭に配置
+    viewModel.toggleCompletion(for: todoB)
+    #expect(viewModel.todos.map(\.content) == ["D", "B", "C", "A"])
+    #expect(viewModel.todos[0].isCompleted == true)
+    #expect(viewModel.todos[1].isCompleted == false)
+
+    // Cを未完了の先頭（index 1）に移動
+    viewModel.moveTodo(from: 2, to: 1)
+    #expect(viewModel.todos.map(\.content) == ["D", "C", "B", "A"])
+  }
+
+  @Test
+  func 完了アイテムのmoveTodoは無視される() async throws {
+    let container = try createTestContainer()
+    let context = container.mainContext
+    let settingsRepository = SettingsRepository(modelContext: context)
+    let viewModel = TodoListViewModel(
+      modelContext: context, settingsRepository: settingsRepository)
+
+    viewModel.addTodo(content: "A")
+    viewModel.addTodo(content: "B")
+
+    let todoA = viewModel.todos[0]
+    viewModel.toggleCompletion(for: todoA)
+
+    // 完了アイテムA(index 0)を移動しようとしても無視される
+    viewModel.moveTodo(from: 0, to: 2)
+    #expect(viewModel.todos.map(\.content) == ["A", "B"])
+    #expect(viewModel.todos[0].isCompleted == true)
   }
 
   @Test

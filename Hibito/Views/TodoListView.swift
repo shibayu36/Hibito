@@ -76,6 +76,7 @@ struct TodoListView: View {
           List {
             ForEach(viewModel.todos) { item in
               TodoRowView(item: item, viewModel: viewModel)
+                .moveDisabled(item.isCompleted)
             }
             .onDelete { indexSet in
               guard let index = indexSet.first else { return }
@@ -218,7 +219,9 @@ struct TodoRowView: View {
   var body: some View {
     HStack {
       Button(action: {
-        viewModel.toggleCompletion(for: item)
+        withAnimation {
+          viewModel.toggleCompletion(for: item)
+        }
       }) {
         Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
           .foregroundColor(item.isCompleted ? .green : .secondary)
