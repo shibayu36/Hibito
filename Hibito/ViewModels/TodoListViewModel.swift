@@ -48,14 +48,17 @@ class TodoListViewModel {
   }
 
   /// SwiftDataからTodoアイテムを読み込んでtodos配列を更新します
-  /// order値でソートされた状態で取得されます
+  /// 完了アイテムを上部、未完了アイテムを下部に配置し、各グループ内はorder値でソートされます
   func loadTodos() {
     let descriptor = FetchDescriptor<TodoItem>(sortBy: [
       SortDescriptor(\.order),
       // 最悪orderが一致した時に安定させる
       SortDescriptor(\.id),
     ])
-    todos = (try? modelContext.fetch(descriptor)) ?? []
+    let allTodos = (try? modelContext.fetch(descriptor)) ?? []
+    let completed = allTodos.filter { $0.isCompleted }
+    let uncompleted = allTodos.filter { !$0.isCompleted }
+    todos = completed + uncompleted
   }
 
   /// 新しいTodoアイテムを追加します
@@ -74,9 +77,22 @@ class TodoListViewModel {
     loadTodos()
   }
 
-  /// 指定されたTodoアイテムの完了状態を切り替えます
+  /// 指定されたTodoアイテムの完了状態を切り替え、グループ内の適切な位置にorder値を調整します
   /// - Parameter todo: 完了状態を切り替えるTodoアイテム
+  /// - Note: Done時は完了グループの末尾、Done解除時は未完了グループの先頭に配置されます
   func toggleCompletion(for todo: TodoItem) {
+    let becomingCompleted = !todo.isCompleted
+
+    if becomingCompleted {
+      // 完了グループの末尾に配置
+      let lastCompletedOrder = todos.last(where: { $0.isCompleted })?.order
+      todo.order = (lastCompletedOrder ?? 0) + 1
+    } else {
+      // 未完了グループの先頭に配置
+      let firstUncompletedOrder = todos.first(where: { !$0.isCompleted })?.order
+      todo.order = (firstUncompletedOrder ?? 0) - 1
+    }
+
     todo.isCompleted.toggle()
     try? modelContext.save()
     loadTodos()
@@ -92,19 +108,27 @@ class TodoListViewModel {
     loadTodos()
   }
 
-  /// Todoアイテムを別の位置に移動します
+  /// 未完了のTodoアイテムを別の位置に移動します
   /// sourceIndexやdestinationはSwiftUIのonMoveから提供される値を前提とする
   /// - Parameters:
   ///   - sourceIndex: 移動元のインデックス
   ///   - destination: 移動先のインデックス
-  /// - Note: ソースインデックスが範囲外の場合は何も実行されません
+  /// - Note: 完了アイテムの移動は無視されます。移動先は未完了アイテム範囲に制限されます。
   func moveTodo(from sourceIndex: Int, to destination: Int) {
     guard sourceIndex >= 0 && sourceIndex < todos.count else { return }
     let movingItem = todos[sourceIndex]
+    guard !movingItem.isCompleted else { return }
+
+    // onMoveのdestinationはtodos全体のインデックスなので、
+    // 先頭の完了アイテム数を引いて未完了配列のインデックスに変換し、範囲内に収める
+    let uncompletedItems = todos.filter { !$0.isCompleted }
+    let completedCount = todos.count - uncompletedItems.count
+    let adjustedDestination = min(
+      max(destination - completedCount, 0), uncompletedItems.count)
 
     let newOrder = calculateOrderValue(
-      destination: destination,
-      items: todos
+      destination: adjustedDestination,
+      items: uncompletedItems
     )
 
     movingItem.order = newOrder
