@@ -6,6 +6,7 @@ class TodoItem {
   var id = UUID()
   var content: String = ""
   var isCompleted = false
+  /// 完了/未完了の各グループ内での相対的な並び順を表す（グループ間での比較は行わない）
   var order: Double = 0.0
   var createdAt = Date()
 
