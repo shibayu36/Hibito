@@ -119,15 +119,14 @@ class TodoListViewModel {
     let movingItem = todos[sourceIndex]
     guard !movingItem.isCompleted else { return }
 
-    // onMoveのdestinationはtodos全体のインデックスなので、
-    // 先頭の完了アイテム数を引いて未完了配列のインデックスに変換し、範囲内に収める
+    // onMoveのdestinationはtodos全体のインデックスなので、未完了のインデックスに変換する
     let uncompletedItems = todos.filter { !$0.isCompleted }
-    let completedCount = todos.count - uncompletedItems.count
-    let adjustedDestination = min(
-      max(destination - completedCount, 0), uncompletedItems.count)
+    let uncompletedStartIndex = todos.count - uncompletedItems.count
+    let uncompletedDestination = min(
+      max(destination - uncompletedStartIndex, 0), uncompletedItems.count)
 
     let newOrder = calculateOrderValue(
-      destination: adjustedDestination,
+      destination: uncompletedDestination,
       items: uncompletedItems
     )
 
