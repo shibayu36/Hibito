@@ -86,11 +86,11 @@ class TodoListViewModel {
     if becomingCompleted {
       // 完了グループの末尾に配置
       let lastCompletedOrder = todos.last(where: { $0.isCompleted })?.order
-      todo.order = (lastCompletedOrder ?? 0) + 1
+      todo.order = (lastCompletedOrder ?? TodoItem.generateNewOrder()) + 1
     } else {
       // 未完了グループの先頭に配置
       let firstUncompletedOrder = todos.first(where: { !$0.isCompleted })?.order
-      todo.order = (firstUncompletedOrder ?? 0) - 1
+      todo.order = (firstUncompletedOrder ?? TodoItem.generateNewOrder()) - 1
     }
 
     todo.isCompleted.toggle()
