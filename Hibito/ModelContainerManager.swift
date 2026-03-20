@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+@MainActor
 class ModelContainerManager {
   static let shared = ModelContainerManager()
 
@@ -32,7 +33,6 @@ class ModelContainerManager {
     }
   }
 
-  @MainActor
   var mainContext: ModelContext {
     modelContainer.mainContext
   }
