@@ -35,7 +35,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */ = {
+		94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -48,7 +48,7 @@
 		94BD4B432DF8FBDD00FAACA9 /* Hibito */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				94BD4B642DF8FBDE00FAACA9 /* Exceptions for "Hibito" folder in "Hibito" target */,
+				94BD4B642DF8FBDE00FAACA9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
 			);
 			path = Hibito;
 			sourceTree = "<group>";
@@ -331,7 +331,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
@@ -375,7 +375,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
@@ -513,7 +513,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily Do Dev.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily Do Dev";
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -536,7 +536,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily Do.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily Do";
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -558,7 +558,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_TARGET_NAME = Hibito;
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -580,7 +580,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_TARGET_NAME = Hibito;
 				XROS_DEPLOYMENT_TARGET = 2.5;
