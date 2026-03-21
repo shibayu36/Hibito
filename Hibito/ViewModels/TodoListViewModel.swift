@@ -32,6 +32,7 @@ class TodoListViewModel {
   private func setupCloudKitNotificationObserver() {
     NotificationCenter.default
       .publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
+      .receive(on: DispatchQueue.main)
       .compactMap { notification -> NSPersistentCloudKitContainer.Event? in
         notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
           as? NSPersistentCloudKitContainer.Event
@@ -39,7 +40,6 @@ class TodoListViewModel {
       .filter { event in
         event.type == .import && event.succeeded
       }
-      .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
         self?.loadTodos()
         self?.iCloudImportDate = Date()
