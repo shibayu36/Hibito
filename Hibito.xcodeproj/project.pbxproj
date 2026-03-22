@@ -93,13 +93,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9496FED62F6F9FDE00649872 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		94BD4B382DF8FBDD00FAACA9 = {
 			isa = PBXGroup;
 			children = (
@@ -107,7 +100,6 @@
 				94BD4B432DF8FBDD00FAACA9 /* Hibito */,
 				94BD4B552DF8FBDE00FAACA9 /* HibitoTests */,
 				94BD4B5F2DF8FBDE00FAACA9 /* HibitoUITests */,
-				9496FED62F6F9FDE00649872 /* Frameworks */,
 				94BD4B422DF8FBDD00FAACA9 /* Products */,
 			);
 			sourceTree = "<group>";
