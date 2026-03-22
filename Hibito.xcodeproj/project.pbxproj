@@ -333,6 +333,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.6.1;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo.dev;
 				PRODUCT_MODULE_NAME = DailyDo;
 				PRODUCT_NAME = "Daily Do Dev";
@@ -377,6 +378,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.6.1;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = org.shibayu36.dailydo;
 				PRODUCT_MODULE_NAME = DailyDo;
 				PRODUCT_NAME = "Daily Do";
