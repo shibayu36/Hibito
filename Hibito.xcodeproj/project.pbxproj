@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		941BD9A72E515E210006F08C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 941BD9A62E515E210006F08C /* FirebaseAnalytics */; };
+		9496FED82F6F9FDE00649872 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9496FED72F6F9FDE00649872 /* FirebaseCrashlytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941BD9A72E515E210006F08C /* FirebaseAnalytics in Frameworks */,
+				9496FED82F6F9FDE00649872 /* FirebaseCrashlytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +93,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9496FED62F6F9FDE00649872 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		94BD4B382DF8FBDD00FAACA9 = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +107,7 @@
 				94BD4B432DF8FBDD00FAACA9 /* Hibito */,
 				94BD4B552DF8FBDE00FAACA9 /* HibitoTests */,
 				94BD4B5F2DF8FBDE00FAACA9 /* HibitoUITests */,
+				9496FED62F6F9FDE00649872 /* Frameworks */,
 				94BD4B422DF8FBDD00FAACA9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -133,6 +143,7 @@
 			name = Hibito;
 			packageProductDependencies = (
 				941BD9A62E515E210006F08C /* FirebaseAnalytics */,
+				9496FED72F6F9FDE00649872 /* FirebaseCrashlytics */,
 			);
 			productName = Hibito;
 			productReference = 94BD4B412DF8FBDD00FAACA9 /* Daily Do Dev.app */;
@@ -644,6 +655,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 941BD9A52E515E210006F08C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		9496FED72F6F9FDE00649872 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 941BD9A52E515E210006F08C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
