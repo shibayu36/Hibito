@@ -13,6 +13,10 @@
     let viewModel: TodoListViewModel
     @Environment(\.modelContext) private var modelContext
     @State private var showTodoList = false
+    @State private var reviewLaunchDayCount: Int = UserDefaults.standard.integer(
+      forKey: "reviewPrompt_launchDayCount")
+    @State private var reviewHasRequested: Bool = UserDefaults.standard.bool(
+      forKey: "reviewPrompt_hasRequested")
 
     var body: some View {
       VStack(spacing: 8) {
@@ -25,6 +29,26 @@
         }
         .buttonStyle(.borderedProminent)
         .controlSize(.regular)
+
+        // レビュー促進デバッグ
+        VStack(spacing: 4) {
+          Text("レビュー促進")
+            .font(.caption2)
+            .foregroundColor(.secondary)
+          Stepper("起動日数: \(reviewLaunchDayCount)", value: $reviewLaunchDayCount, in: 0...100)
+            .font(.caption)
+            .onChange(of: reviewLaunchDayCount) { _, newValue in
+              UserDefaults.standard.set(newValue, forKey: "reviewPrompt_launchDayCount")
+            }
+          Toggle("リクエスト済み", isOn: $reviewHasRequested)
+            .font(.caption)
+            .onChange(of: reviewHasRequested) { _, newValue in
+              UserDefaults.standard.set(newValue, forKey: "reviewPrompt_hasRequested")
+            }
+        }
+        .padding(8)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(8)
 
         Button(showTodoList ? "TODOリスト非表示" : "TODOリスト表示") {
           showTodoList.toggle()
