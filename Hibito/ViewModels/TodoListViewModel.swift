@@ -15,17 +15,35 @@ import SwiftData
 class TodoListViewModel {
   private let modelContext: ModelContext
   private let settingsRepository: SettingsRepository
+  private let reviewPromptRepository: ReviewPromptRepository
   private(set) var todos: [TodoItem] = []
   private var cancellables: Set<AnyCancellable> = []
   // iCloudでデータをimportした時刻を保持する。Listの更新をトリガーにするために使用する。
   private(set) var iCloudImportDate: Date
 
-  init(modelContext: ModelContext, settingsRepository: SettingsRepository) {
+  init(
+    modelContext: ModelContext,
+    settingsRepository: SettingsRepository,
+    reviewPromptRepository: ReviewPromptRepository
+  ) {
     self.modelContext = modelContext
     self.settingsRepository = settingsRepository
+    self.reviewPromptRepository = reviewPromptRepository
     self.iCloudImportDate = Date()
     loadTodos()
     setupCloudKitNotificationObserver()
+  }
+
+  func recordAppForeground() {
+    reviewPromptRepository.recordAppForeground()
+  }
+
+  func shouldRequestReview() -> Bool {
+    reviewPromptRepository.shouldRequestReview()
+  }
+
+  func markReviewRequested() {
+    reviewPromptRepository.markReviewRequested()
   }
 
   /// CloudKitでデータをimportした時に、todos配列を更新する
