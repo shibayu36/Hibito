@@ -5,17 +5,25 @@
 //  Created by Yuki Shibazaki on 2025/06/11.
 //
 
+import FirebaseAnalytics
 import Foundation
+import StoreKit
 import SwiftData
 import SwiftUI
 
 struct TodoListView: View {
   @Environment(\.scenePhase) private var scenePhase
+  @Environment(\.requestReview) private var requestReview
 
   @State private var viewModel = {
     let modelContext = ModelContainerManager.shared.mainContext
     let settingsRepository = SettingsRepository(modelContext: modelContext)
-    return TodoListViewModel(modelContext: modelContext, settingsRepository: settingsRepository)
+    let reviewPromptRepository = ReviewPromptRepository()
+    return TodoListViewModel(
+      modelContext: modelContext,
+      settingsRepository: settingsRepository,
+      reviewPromptRepository: reviewPromptRepository
+    )
   }()
 
   // 新規Todo入力の状態管理
@@ -160,6 +168,7 @@ struct TodoListView: View {
       case .active:
         performResetCheck()
         startResetTimer()
+        checkReviewPrompt()
       case .background, .inactive:
         stopResetTimer()
       @unknown default:
@@ -179,6 +188,17 @@ struct TodoListView: View {
     viewModel.addTodo(content: newItemText)
     newItemText = ""
     triggerAddFeedback.toggle()
+  }
+
+  // MARK: - レビュー促進
+
+  private func checkReviewPrompt() {
+    viewModel.recordAppForeground()
+    if viewModel.shouldRequestReview() {
+      Analytics.logEvent("review_prompt_requested", parameters: nil)
+      requestReview()
+      viewModel.markReviewRequested()
+    }
   }
 
   // MARK: - 自動リセット機能
